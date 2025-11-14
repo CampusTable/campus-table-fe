@@ -24,7 +24,7 @@ const pretendard = localFont({
   variable: "--font-pretendard",
   display: "swap",
   preload: true,
-})
+});
 
 const kccHanbit = localFont({
   src: [
@@ -37,7 +37,7 @@ const kccHanbit = localFont({
   variable: "--font-kcc-hanbit",
   display: "swap",
   preload: true,
-})
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
