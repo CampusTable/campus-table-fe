@@ -1,0 +1,37 @@
+/* Typography tokens */
+@theme {
+  /* Heading 24px / LH 100% / Letter-spacing -0.32px */
+  --text-heading: 1.5rem; /* 24px */
+  --text-heading--line-height: 1; /* 100% */
+  --text-heading--letter-spacing: -0.02rem; /* ≒ -0.32px */
+
+  /* Sub Heading 1 20px / Heading 계열 → LH 100% */
+  --text-subheading-1: 1.25rem; /* 20px */
+  --text-subheading-1--line-height: 1;
+  --text-subheading-1--letter-spacing: -0.02rem;
+
+  /* Sub Heading 2 18px / Heading 계열 → LH 100% */
+  --text-subheading-2: 1.125rem; /* 18px */
+  --text-subheading-2--line-height: 1;
+  --text-subheading-2--letter-spacing: -0.02rem;
+
+  /* Label 16px / Body Text → LH 140% */
+  --text-label: 1rem; /* 16px */
+  --text-label--line-height: 1.4;
+  --text-label--letter-spacing: -0.02rem;
+
+  /* Paragraph 14px / Body Text → LH 140% */
+  --text-paragraph: 0.875rem; /* 14px */
+  --text-paragraph--line-height: 1.4;
+  --text-paragraph--letter-spacing: -0.02rem;
+
+  /* Callout 12px / Body Text → LH 140% */
+  --text-callout: 0.75rem; /* 12px */
+  --text-callout--line-height: 1.4;
+  --text-callout--letter-spacing: -0.02rem;
+
+  /* Tag 10px / Body Text → LH 140% */
+  --text-tag: 0.625rem; /* 10px */
+  --text-tag--line-height: 1.4;
+  --text-tag--letter-spacing: -0.02rem;
+}
