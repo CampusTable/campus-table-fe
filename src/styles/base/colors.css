@@ -13,14 +13,15 @@
   --color-white: #ffffff;
 
   --color-black: #17171b;
-  --color-black-900: #2f2f32;
-  --color-black-800: #454549;
-  --color-black-700: #5d5d60;
-  --color-black-600: #747476;
-  --color-black-500: #8a8a8c;
-  --color-black-400: #a2a2a4;
-  --color-black-300: #d1d1d1;
-  --color-black-200: #e8e8e9;
+  --color-gray-900: #17171b;
+  --color-gray-800: #2f2f32;
+  --color-gray-700: #454549;
+  --color-gray-600: #5d5d60;
+  --color-gray-500: #747476;
+  --color-gray-400: #8a8a8c;
+  --color-gray-300: #a2a2a4;
+  --color-gray-200: #d1d1d1;
+  --color-gray-100: #e8e8e9;
 
   --color-main: #f55b03;
   --color-main-800: #f77c35;
