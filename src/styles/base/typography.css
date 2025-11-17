@@ -1,4 +1,9 @@
 /* Typography tokens */
+@theme inline {
+  --font-sans: var(--font-pretendard); /* 메인 폰트 (pretendard) */
+  --font-display: var(--font-kcc-hanbit); /* 서브 폰트 (kcc-hanbit) */
+}
+
 @theme {
   /* Heading 24px / LH 100% / Letter-spacing -0.32px */
   --text-heading: 1.5rem; /* 24px */

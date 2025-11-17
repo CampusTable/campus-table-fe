@@ -1,27 +1,5 @@
 /* 프로젝트 공통 디자인 토큰 */
 
-/* Color tokens */
-@theme {
-  --color-white: #ffffff;
-
-  --color-neutral-900: #17171b;
-  --color-neutral-800: #2f2f32;
-  --color-neutral-700: #454549;
-  --color-neutral-600: #5d5d60;
-  --color-neutral-500: #747476;
-  --color-neutral-400: #8a8a8c;
-  --color-neutral-300: #a2a2a4;
-  --color-neutral-200: #bababb;
-  --color-neutral-100: #d1d1d1;
-  --color-neutral-50: #e8e8e9;
-
-  --color-main: #f55b03;
-  --color-main-100: #feefe6;
-
-  --color-blue: #0380f5;
-  --color-blue-100: #e6f3fe;
-}
-
 /* Spacing / Gutter tokens */
 @theme {
   /* 숫자 기반 스케일의 베이스 (1 → 4px) */
