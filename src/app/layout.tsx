@@ -1,37 +1,7 @@
-import type { Metadata } from "next";
 import "./globals.css";
-import localFont from "next/font/local";
+import { kccHanbit, pretendard } from "@/styles/system/fonts";
 
-const pretendard = localFont({
-  src: [
-    {
-      path: "../assets/fonts/PretendardVariable.woff2",
-      weight: "100 900",
-      style: "normal",
-    },
-  ],
-  variable: "--font-pretendard",
-  display: "swap",
-  preload: true,
-});
-
-const kccHanbit = localFont({
-  src: [
-    {
-      path: "../assets/fonts/KCC-Hanbit.woff2",
-      weight: "100 900",
-      style: "normal",
-    },
-  ],
-  variable: "--font-kcc-hanbit",
-  display: "swap",
-  preload: true,
-});
-
-export const metadata: Metadata = {
-  title: "CampusTable",
-  description: "먹고 싶은 학식, 바로 주문해요!",
-};
+export { metadata } from "./metadata";
 
 export default function RootLayout({
   children,
@@ -43,7 +13,7 @@ export default function RootLayout({
       lang="ko"
       className={`${pretendard.variable} ${kccHanbit.variable}`}
     >
-      <body className="min-h-screen antialiased font-pretendard">
+      <body className="min-h-screen antialiased font-sans">
         {children}
       </body>
     </html>
