@@ -1,0 +1,15 @@
+/* 프로젝트 공통 디자인 토큰 */
+
+/* Spacing / Gutter tokens */
+@theme {
+  /* 숫자 기반 스케일의 베이스 (1 → 4px) */
+  --spacing: 0.25rem; /* 4px */
+
+  /* 페이지 공통 gutter/margin 용도 (값은 추후 필요시 조정) */
+  --spacing-gutter: 1.5rem; /* 24px, 페이지 기본 좌우 padding 등 */
+  --spacing-gutter-inline: 1rem; /* 16px, 좀 더 타이트한 가로 gutter */
+  --spacing-gutter-block: 1.25rem; /* 20px, 위아래 여백 */
+
+  /* 섹션 간 간격 같은 큰 단위 spacing */
+  --spacing-section: 2.5rem; /* 40px */
+}
