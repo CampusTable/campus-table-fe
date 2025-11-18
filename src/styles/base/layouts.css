@@ -1,5 +1,10 @@
 /* 프로젝트 공통 디자인 토큰 */
 
+:root {
+  --safe-top: env(safe-area-inset-top);
+  --safe-bottom: env(safe-area-inset-bottom);
+}
+
 /* Spacing / Gutter tokens */
 @theme {
   /* 숫자 기반 스케일의 베이스 (1 → 4px) */
