@@ -18,7 +18,7 @@
   "monochromeIconUrl": "https://www.campustable.shop/icons/monochrome-icon-512x512.png",
   "splashScreenFadeOutDuration": 300,
   "signingKey": {
-    "path": "/Users/dojes/Documents/SejongUni/Alom/project/campus-table/campus-table-fe/android/android.keystore",
+    "path": "./android.keystore",
     "alias": "campus-table"
   },
   "appVersionName": "1",

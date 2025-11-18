@@ -180,7 +180,7 @@ android {
     }
 }
 
-task generateShorcutsFile {
+task generateShortcutsFile {
     assert twaManifest.shortcuts.size() < 5, "You can have at most 4 shortcuts."
     twaManifest.shortcuts.eachWithIndex { s, i ->
         assert s.name != null, 'Missing `name` in shortcut #' + i
@@ -215,7 +215,7 @@ task generateShorcutsFile {
     shortcutsFile.text = xmlWriter.toString() + '\n'
 }
 
-preBuild.dependsOn(generateShorcutsFile)
+preBuild.dependsOn(generateShortcutsFile)
 
 repositories {
     
