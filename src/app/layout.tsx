@@ -1,5 +1,6 @@
 import "./globals.css";
 import { kccHanbit, pretendard } from "@/styles/system/fonts";
+import React from "react";
 
 export { metadata } from "./metadata";
 
