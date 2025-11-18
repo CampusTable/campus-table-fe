@@ -62,13 +62,13 @@ android {
         def defaultVersionCode = 1
 
         if (project.hasProperty("versionName")) {
-            versionName project.property("versionName") as String
+            versionName project.property("versionName")
         } else {
             versionName defaultVersionName
         }
 
         if (project.hasProperty("versionCode")) {
-            versionCode (project.property("versionCode") as String).toInteger()
+            versionCode project.property("versionCode")
         } else {
             versionCode defaultVersionCode
         }
