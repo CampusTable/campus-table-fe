@@ -1,21 +1,19 @@
-import React, { JSX } from "react";
+import PageFrame from "@/shared/components/layout/page-frame/PageFrame";
 
 export default function MainLayout({
   children
 }: Readonly<{
   children: React.ReactNode
-}>): JSX.Element {
+}>) {
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen w-full bg-zinc-50">
+    <>
 
       {/* 헤더 */}
 
-      <main className="flex flex-col justify-center w-full max-w-3xl min-h-screen px-gutter bg-white">
-        {children}
-      </main>
+      <PageFrame>{children}</PageFrame>
 
       {/* 하단 네비바 */}
 
-    </div>
+    </>
   );
-};
+}
