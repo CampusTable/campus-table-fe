@@ -135,7 +135,25 @@ jobs:
 
       - name: APK & AAB 파일 생성
         # Gradle을 통해 release APK + AAB 동시 생성
-        run: ./gradlew --no-daemon clean assembleRelease bundleRelease
+        run: |
+          # 태그에서 버전 문자열 추출
+          VERSION="${{ needs.check-version-update.outputs.version }}"
+          
+          # 버전 문자열을 major/minor/patch 분리
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+
+          # 버전 코드를 정수로 계산 (major * 10000 + minor * 100 + patch)
+          VERSION_CODE=$((MAJOR * 10000 + MINOR * 100 + PATCH))
+          
+          echo "🏷️ Version name: $VERSION"
+          echo "🔢 Version code: $VERSION_CODE"
+          
+          ./gradlew --no-daemon clean \
+            -PversionName="$VERSION" \
+            -PversionCode="$VERSION_CODE" \
+            assembleRelease \
+            bundleRelease
+
         env:
           # build.gradle에서 읽는 서명 관련 값
           KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
