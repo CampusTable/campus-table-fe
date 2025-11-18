@@ -68,13 +68,10 @@ android {
         }
 
         if (project.hasProperty("versionCode")) {
-            versionCode(project.property("versionCode") as String).toInteger()
+            versionCode (project.property("versionCode") as String).toInteger()
         } else {
             versionCode defaultVersionCode
         }
-
-        versionCode 1
-        versionName "1"
 
         // The name for the application
         resValue "string", "appName", twaManifest.name
