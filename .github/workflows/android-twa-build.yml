@@ -100,16 +100,16 @@ jobs:
         working-directory: android
 
     steps:
-      - name: 🏷️ 버전 정보
-        run: |
-          echo "🏷️ 빌드할 버전: ${{ needs.check-version-update.outputs.tag }}"
-          echo "📦 버전 번호: ${{ needs.check-version-update.outputs.version }}"
-
       - name: 코드 체크아웃
         uses: actions/checkout@v4
         with:
           ref: ${{ needs.check-version-update.outputs.tag }}
           fetch-depth: 0
+
+      - name: 🏷️ 버전 정보
+        run: |
+          echo "🏷️ 빌드할 버전: ${{ needs.check-version-update.outputs.tag }}"
+          echo "📦 버전 번호: ${{ needs.check-version-update.outputs.version }}"
 
       - name: ☕ JDK 설정
         uses: actions/setup-java@v4
