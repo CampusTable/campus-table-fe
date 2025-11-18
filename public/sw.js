@@ -2,7 +2,12 @@ const CACHE_NAME = 'campus-table';
 const STATIC_CACHE_URLS = [
   '/',
   '/icons/icon-192x192.png',
+  '/icons/icon-256x256.png',
   '/icons/icon-512x512.png',
+  '/icons/icon-2048x2048.png',
+  '/icons/badge-72x72.png',
+  '/icons/action-close.png',
+  '/icons/action-open.png',
   '/manifest.webmanifest'
 ];
 
