@@ -1,6 +1,6 @@
 /* 프로젝트 공통 디자인 토큰 */
 
-.root {
+:root {
   --safe-top: env(safe-area-inset-top);
   --safe-bottom: env(safe-area-inset-bottom);
 }
