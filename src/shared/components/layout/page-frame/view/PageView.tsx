@@ -1,6 +1,6 @@
-import styles from "./page-frame.module.css";
+import styles from "./page-view.module.css";
 
-export default function PageFrame({
+export default function PageView({
   children
 }: Readonly<{
   children: React.ReactNode

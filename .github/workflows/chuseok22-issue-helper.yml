@@ -2,7 +2,7 @@ name: Chuseok22 Issue Branch & Commit Generator
 
 on:
   issues:
-    types: [opened, edited]
+    types: [ opened, edited ]
 
 permissions:
   issues: write
