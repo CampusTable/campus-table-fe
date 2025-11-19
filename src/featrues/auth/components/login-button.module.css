@@ -1,0 +1,24 @@
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  min-height: 3.5rem;
+
+  border-radius: 1rem;
+  background-color: var(--color-main);
+}
+
+.button:disabled {
+  background-color: var(--color-gray-100);
+}
+
+.label {
+  color: var(--color-white);
+  font-size: var(--text-label);
+  line-height: var(--text-label--line-height);
+  letter-spacing: var(--text-label--letter-spacing);
+  font-style: normal;
+  font-weight: 700;
+}
