@@ -56,19 +56,19 @@ android {
     defaultConfig {
         applicationId "shop.campustable.www.twa"
         minSdkVersion 21
-        targetSdkVersion 35
+        targetSdkVersion 36
 
         def defaultVersionName = "0.0.1"
         def defaultVersionCode = 1
 
-        if (project.hasProperty("versionName")) {
-            versionName project.property("versionName")
+        if (project.hasProperty("appVersionName")) {
+            versionName project.property("appVersionName")
         } else {
             versionName defaultVersionName
         }
 
-        if (project.hasProperty("versionCode")) {
-            versionCode project.property("versionCode")
+        if (project.hasProperty("appVersionCode")) {
+            versionCode project.property("appVersionCode")
         } else {
             versionCode defaultVersionCode
         }

@@ -19,8 +19,8 @@ concurrency:
 env:
   NODE_VERSION: '20'
   JAVA_VERSION: '21'
-  ANDROID_API_LEVEL: '35'
-  ANDROID_BUILD_TOOLS: '35.0.0'
+  ANDROID_API_LEVEL: '36'
+  ANDROID_BUILD_TOOLS: '36.0.0'
   APP_NAME: 'CampusTable'
   WEBSITE_URL: 'https://www.campustable.shop'
   PACKAGE_ID: 'com.campustable.www.twa'
@@ -149,8 +149,8 @@ jobs:
           echo "🔢 Version code: $VERSION_CODE"
           
           ./gradlew --no-daemon clean \
-            -PversionName="$VERSION" \
-            -PversionCode="$VERSION_CODE" \
+            -PappVersionName="$VERSION" \
+            -PappVersionCode="$VERSION_CODE" \
             assembleRelease \
             bundleRelease
 
