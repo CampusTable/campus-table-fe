@@ -1,4 +1,3 @@
-import { JSX } from "react";
 import styles from "./login-button.module.css"
 
 interface LoginButtonProps {
@@ -9,7 +8,7 @@ interface LoginButtonProps {
 export default function LoginButton({
   label = "로그인",
   disabled = false,
-}: LoginButtonProps): JSX.Element {
+}: LoginButtonProps) {
   return (
     <button
       type="submit"
