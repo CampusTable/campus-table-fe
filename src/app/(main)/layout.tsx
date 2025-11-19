@@ -1,4 +1,5 @@
-import PageFrame from "@/shared/components/layout/page-frame/PageFrame";
+import PageContainer from "@/shared/components/layout/page-frame/container/PageContainer";
+import PageView from "@/shared/components/layout/page-frame/view/PageView";
 
 export default function MainLayout({
   children
@@ -6,14 +7,14 @@ export default function MainLayout({
   children: React.ReactNode
 }>) {
   return (
-    <>
+    <PageContainer>
 
       {/* 헤더 */}
 
-      <PageFrame>{children}</PageFrame>
+      <PageView>{children}</PageView>
 
       {/* 하단 네비바 */}
 
-    </>
+    </PageContainer>
   );
 }

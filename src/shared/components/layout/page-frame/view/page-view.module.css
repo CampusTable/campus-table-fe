@@ -1,10 +1,10 @@
 .container {
+  background-color: var(--color-white);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 100%;
   max-width: var(--container-3xl);
   min-height: 100vh;
   padding-inline: var(--spacing-gutter);
-  background-color: var(--color-white);
+  width: 100%;
 }
