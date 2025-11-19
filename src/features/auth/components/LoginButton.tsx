@@ -1,4 +1,4 @@
-import styles from "./login-button.module.css"
+import styles from "./login-button.module.css";
 
 interface LoginButtonProps {
   label?: string; // 버튼 라벨
