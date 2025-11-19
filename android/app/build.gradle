@@ -61,17 +61,25 @@ android {
         def defaultVersionName = "0.0.1"
         def defaultVersionCode = 1
 
-        if (project.hasProperty("appVersionName")) {
-            versionName project.property("appVersionName")
-        } else {
-            versionName defaultVersionName
+        def cliProps = gradle.startParameter.projectProperties
+        def cliVersionNameRaw = cliProps['appVersionName']
+        def cliVersionCodeRaw = cliProps['appVersionCode']
+
+        def resolvedVersionName = defaultVersionName
+        def resolvedVersionCode = defaultVersionCode
+
+        if (cliVersionNameRaw != null && cliVersionNameRaw.toString().trim()) {
+            resolvedVersionName = cliVersionNameRaw.toString().trim()
         }
 
-        if (project.hasProperty("appVersionCode")) {
-            versionCode project.property("appVersionCode")
-        } else {
-            versionCode defaultVersionCode
+        if (cliVersionCodeRaw != null && cliVersionCodeRaw.toString().trim()) {
+            resolvedVersionCode = cliVersionCodeRaw.toString().trim().toInteger()
         }
+
+        versionName resolvedVersionName
+        versionCode resolvedVersionCode
+
+        println "[TWA] versionName=${resolvedVersionName}, versionCode=${resolvedVersionCode}"
 
         // The name for the application
         resValue "string", "appName", twaManifest.name
