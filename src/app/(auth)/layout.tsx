@@ -1,4 +1,5 @@
-import PageFrame from "@/shared/components/layout/page-frame/PageFrame";
+import PageContainer from "@/shared/components/layout/page-frame/container/PageContainer";
+import PageView from "@/shared/components/layout/page-frame/view/PageView";
 
 export default function AuthLayout({
   children
@@ -6,6 +7,11 @@ export default function AuthLayout({
   children: React.ReactNode
 }>) {
   return (
-    <PageFrame>{children}</PageFrame>
+    <PageContainer>
+      <PageView>
+        {children}
+      </PageView>
+    </PageContainer>
+
   );
 }
