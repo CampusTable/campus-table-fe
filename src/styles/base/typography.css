@@ -22,21 +22,21 @@
 
   /* Label 16px / Body Text → LH 140% */
   --text-label: 1rem; /* 16px */
-  --text-label--line-height: 1;
+  --text-label--line-height: 1.4;
   --text-label--letter-spacing: -0.02rem;
 
   /* Paragraph 14px / Body Text → LH 140% */
   --text-paragraph: 0.875rem; /* 14px */
-  --text-paragraph--line-height: 1;
+  --text-paragraph--line-height: 1.4;
   --text-paragraph--letter-spacing: -0.02rem;
 
   /* Callout 12px / Body Text → LH 140% */
   --text-callout: 0.75rem; /* 12px */
-  --text-callout--line-height: 1;
+  --text-callout--line-height: 1.4;
   --text-callout--letter-spacing: -0.02rem;
 
   /* Tag 10px / Body Text → LH 140% */
   --text-tag: 0.625rem; /* 10px */
-  --text-tag--line-height: 1;
+  --text-tag--line-height: 1.4;
   --text-tag--letter-spacing: -0.02rem;
 }
