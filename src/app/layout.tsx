@@ -1,6 +1,5 @@
 import "./globals.css";
 import { kccHanbit, pretendard } from "@/styles/system/fonts";
-import ServiceWorkerRegister from "@/shared/components/service-worker/ServiceWorkerRegister";
 
 export { metadata } from "./metadata";
 
@@ -16,7 +15,7 @@ export default function RootLayout({
     >
       <body className="min-h-screen antialiased font-sans">
         {children}
-        <ServiceWorkerRegister />
+        {/*<ServiceWorkerRegister />*/} {/* TODO: 추후 배포 후 주석 제거 */}
       </body>
     </html>
   );

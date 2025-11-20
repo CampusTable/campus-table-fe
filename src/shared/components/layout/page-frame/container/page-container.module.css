@@ -1,7 +1,8 @@
 .container {
   background-color: var(--color-zinc-50) /* oklch(98.5% 0 0) = #fafafa */;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   min-height: 100vh;
   width: 100%;
 }
