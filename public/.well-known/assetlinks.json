@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "shop.campustable.www.twa",
+      "sha256_cert_fingerprints": [
+        "2C:67:38:48:08:33:08:49:99:D3:91:99:DC:E9:34:41:2C:A6:CC:8B:12:F3:E0:71:BB:3C:1E:A0:26:ED:72:D5"
+      ]
+    }
+  }
+]
