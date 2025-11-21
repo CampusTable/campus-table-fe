@@ -11,3 +11,4 @@ export { default as JingwanDisableIcon } from "./jingwan-disable.svg";
 export { default as JingwanEnableIcon } from "./jingwan-enable.svg";
 export { default as MyDisableIcon } from "./my-disable.svg";
 export { default as MyEnableIcon } from "./my-enable.svg";
+export { default as ShoppingBag } from "./shopping-bag.svg";
