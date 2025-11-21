@@ -5,38 +5,31 @@
 }
 
 @theme {
-  /* Heading 24px / LH 100% / Letter-spacing -0.32px */
-  --text-heading: 1.5rem; /* 24px */
-  --text-heading--line-height: 1; /* 100% */
-  --text-heading--letter-spacing: -0.02rem; /* ≒ -0.32px */
+  /* 공통 line-height 토큰 */
+  --line-height-single: 1;
+  --line-height-multi: 1.4;
 
-  /* Sub Heading 1 20px / Heading 계열 → LH 100% */
-  --text-subheading-1: 1.25rem; /* 20px */
-  --text-subheading-1--line-height: 1;
-  --text-subheading-1--letter-spacing: -0.02rem;
+  /* 공통 letter-spacing 토큰 */
+  --letter-spacing: -0.02rem; /* -0.32 px */
 
-  /* Sub Heading 2 18px / Heading 계열 → LH 100% */
-  --text-subheading-2: 1.125rem; /* 18px */
-  --text-subheading-2--line-height: 1;
-  --text-subheading-2--letter-spacing: -0.02rem;
+  /* 공통 font-size 토큰 */
+  --text-2xl: 1.5rem; /* 24px */
+  --text-xl: 1.25rem; /* 20px */
+  --text-lg: 1.125rem; /* 18px */
+  --text-base: 1rem; /* 16px */
+  --text-sm: 0.875rem; /* 14px */
+  --text-xs: 0.75rem; /* 12px */
+  --text-2xs: 0.625rem; /* 10px */
 
-  /* Label 16px / Body Text → LH 140% */
-  --text-label: 1rem; /* 16px */
-  --text-label--line-height: 1.4;
-  --text-label--letter-spacing: -0.02rem;
+  /* 공통 font-weight 토큰 */
+  --font-black: 900;
+  --font-extrabold: 800;
+  --font-bold: 700;
+  --font-semibold: 600;
+  --font-medium: 500;
+  --font-normal: 400;
+  --font-light: 300;
+  --font-extralight: 200;
+  --font-thin: 100;
 
-  /* Paragraph 14px / Body Text → LH 140% */
-  --text-paragraph: 0.875rem; /* 14px */
-  --text-paragraph--line-height: 1.4;
-  --text-paragraph--letter-spacing: -0.02rem;
-
-  /* Callout 12px / Body Text → LH 140% */
-  --text-callout: 0.75rem; /* 12px */
-  --text-callout--line-height: 1.4;
-  --text-callout--letter-spacing: -0.02rem;
-
-  /* Tag 10px / Body Text → LH 140% */
-  --text-tag: 0.625rem; /* 10px */
-  --text-tag--line-height: 1.4;
-  --text-tag--letter-spacing: -0.02rem;
 }
