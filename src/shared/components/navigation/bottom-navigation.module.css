@@ -4,12 +4,12 @@
 
   width: 100%;
   max-width: var(--container-3xl);
-  height: var(--bottom-navigation-height);
+  height: var(--bottom-safe-navigation-height);
 
   background-color: var(--color-white);
 
   padding-top: 0.44rem;
-  padding-bottom: calc(2.12rem + var(--safe-bottom));
+  padding-bottom: var(--safe-bottom);
   padding-inline: 1.87rem;
 
   filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.20));
