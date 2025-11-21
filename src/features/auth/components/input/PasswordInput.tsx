@@ -8,17 +8,23 @@ interface PasswordInputProps {
   value: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   disabled?: boolean;
+  hasError?: boolean;
 }
 
 export default function PasswordInput({
   value,
   onChange,
   disabled = false,
+  hasError = false,
 }: PasswordInputProps) {
 
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const inputType: "password" | "text" = isVisible ? "text" : "password";
+
+  const containerClassName: string = hasError
+    ? `${styles.container} ${styles.containerError}`
+    : styles.container;
 
   const handleToggleVisibility = (): void => {
     if (disabled) {
@@ -28,7 +34,7 @@ export default function PasswordInput({
   }
 
   return (
-    <div className={styles.container}>
+    <div className={containerClassName}>
       <div className={styles.inputWrapper}>
         <input
           id="password"
