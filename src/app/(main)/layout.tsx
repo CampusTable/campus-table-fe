@@ -1,6 +1,7 @@
 import PageContainer from "@/shared/components/layout/page-frame/container/PageContainer";
 import PageView from "@/shared/components/layout/page-frame/view/PageView";
 import BottomNavigation from "@/shared/components/navigation/BottomNavigation";
+import Header from "@/shared/components/header/Header";
 
 export default function MainLayout({
   children
@@ -11,6 +12,7 @@ export default function MainLayout({
     <PageContainer>
 
       {/* 헤더 */}
+      <Header />
 
       <PageView>{children}</PageView>
 
