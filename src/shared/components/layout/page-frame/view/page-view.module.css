@@ -2,9 +2,12 @@
   background-color: var(--color-white);
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
+  align-items: stretch;
   max-width: var(--container-3xl);
   min-height: 100vh;
+  padding-top: var(--top-header-height);
+  padding-bottom: var(--bottom-navigation-height);
   padding-inline: var(--spacing-gutter);
   width: 100%;
 }
