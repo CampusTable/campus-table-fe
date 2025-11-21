@@ -1,0 +1,31 @@
+.header {
+  position: fixed;
+  top: calc(var(--spacing) * 0);
+
+  width: 100%;
+  max-width: var(--container-3xl);
+  height: var(--top-safe-header-height); /* safe-area 포함 전체 높이 */
+
+  background-color: var(--color-white);
+
+  padding-top: var(--safe-top); /* safe-top 만큼 padding */
+  padding-inline: 1.5rem;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+  height: var(--top-header-height);
+}
+
+.logo {
+  color: var(--color-black);
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-normal);
+  line-height: var(--line-height-single);
+  letter-spacing: var(--letter-spacing);
+}
