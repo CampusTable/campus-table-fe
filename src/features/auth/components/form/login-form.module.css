@@ -3,3 +3,21 @@
   flex-direction: column;
   width: 100%;
 }
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 0.88rem;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 1.5rem;
+}
+
+.buttonContainer {
+  margin-top: 14.75rem;
+}
