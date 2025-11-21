@@ -2,6 +2,7 @@
 @import "../styles/base/colors.css";
 @import "../styles/base/layouts.css";
 @import "../styles/base/typography.css";
+@import "../styles/base/motion.css";
 
 html, body {
   height: 100%;
