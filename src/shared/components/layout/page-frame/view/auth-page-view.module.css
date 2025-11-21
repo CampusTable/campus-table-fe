@@ -1,0 +1,13 @@
+.container {
+  background-color: var(--color-white);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  max-width: var(--container-3xl);
+  min-height: 100vh;
+  padding-top: var(--safe-top);
+  padding-bottom: var(--safe-bottom);
+  padding-inline: var(--spacing-gutter);
+  width: 100%;
+}
