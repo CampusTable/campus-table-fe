@@ -1,3 +1,4 @@
+export { default as ErrorCircleFilled } from "./error-circle-filled.svg";
 export { default as EyesHideIcon } from "./eyes-hide.svg";
 export { default as EyesSeeIcon } from "./eyes-see.svg";
 export { default as GyebapDisableIcon } from "./gyebap-disable.svg";
