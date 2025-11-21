@@ -6,8 +6,8 @@
   align-items: stretch;
   max-width: var(--container-3xl);
   min-height: 100vh;
-  padding-top: var(--top-header-height);
-  padding-bottom: var(--bottom-navigation-height);
+  padding-top: var(--top-safe-header-height);
+  padding-bottom: var(--bottom-safe-navigation-height);
   padding-inline: var(--spacing-gutter);
   width: 100%;
 }
