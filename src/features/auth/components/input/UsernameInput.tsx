@@ -1,7 +1,7 @@
 'use client';
 
 import { ChangeEvent } from "react";
-import styles from "./username-input.module.css"
+import styles from "./username-input.module.css";
 
 interface UsernameInputProps {
   value: string;
