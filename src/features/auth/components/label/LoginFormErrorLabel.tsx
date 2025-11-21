@@ -11,7 +11,7 @@ export default function LoginFormErrorLabel({
 
   const containerClassName: string = visible
     ? styles.container
-    : styles.containerHidden;
+    : `${styles.container} ${styles.containerHidden}`;
 
   return (
     <div className={containerClassName}>
