@@ -3,9 +3,7 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-
   min-height: 3.5rem;
-
   border-radius: 1rem;
   background-color: var(--color-main);
 }
@@ -16,9 +14,9 @@
 
 .label {
   color: var(--color-white);
-  font-size: var(--text-label);
-  line-height: var(--text-label--line-height);
-  letter-spacing: var(--text-label--letter-spacing);
+  font-size: var(--text-base);
   font-style: normal;
-  font-weight: 700;
+  font-weight: var(--font-bold);
+  line-height: var(--line-height-single);
+  letter-spacing: var(--letter-spacing);
 }

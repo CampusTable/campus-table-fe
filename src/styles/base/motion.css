@@ -1,0 +1,12 @@
+@theme {
+  --transition-duration-fast: 0.18s;
+  --transition-duration-normal: 0.24s;
+
+  --transition-ease-in: ease-in;
+  --transition-ease-out: ease-out;
+  --transition-ease-in-out: ease-in-out;
+
+  --transition-height-fast: height var(--transition-duration-fast) var(--transition-ease-out);
+  --transition-color-fast: color var(--transition-duration-fast) var(--transition-ease-out);
+  --transition-font-weight-fast: font-weight var(--transition-duration-fast) var(--transition-ease-out);
+}

@@ -1,5 +1,10 @@
+import LoginForm from "@/features/auth/components/form/LoginForm";
+
 export default function MyMainPage() {
   return (
-    <div>마이페이지 메인 페이지</div>
+    <>
+      <div>마이페이지 메인 페이지</div>
+      <LoginForm />
+    </>
   );
 };
