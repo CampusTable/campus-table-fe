@@ -45,6 +45,7 @@ export default function PasswordInput({
         <PasswordVisibleIcon
           onClick={handleToggleVisibility}
           isVisible={isVisible}
+          disabled={disabled}
         />
       </div>
       <div className={styles.underlineWrapper}>

@@ -4,17 +4,20 @@ import styles from "./password-visible-icon.module.css";
 interface PasswordVisibleIconProps {
   onClick: () => void;
   isVisible: boolean;
+  disabled?: boolean;
 }
 
 export default function PasswordVisibleIcon({
   onClick,
   isVisible,
+  disabled = false,
 }: PasswordVisibleIconProps) {
   return (
     <button
       type="button"
       className={styles.eyeButton}
       onClick={onClick}
+      disabled={disabled}
     >
       {isVisible ? <EyesSeeIcon /> : <EyesHideIcon />}
     </button>
