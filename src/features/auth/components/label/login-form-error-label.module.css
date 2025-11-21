@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+  align-items: center;
+  padding-inline: calc(var(--spacing) * 2); /* 0.5rem */
+  gap: calc(var(--spacing) * 2);
+}
+
+.containerHidden {
+  visibility: hidden;
+}
+
+.label {
+  color: var(--color-red);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  line-height: var(--line-height-single);
+  letter-spacing: var(--letter-spacing);
+}
