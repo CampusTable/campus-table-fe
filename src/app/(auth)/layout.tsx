@@ -1,5 +1,5 @@
 import PageContainer from "@/shared/components/layout/page-frame/container/PageContainer";
-import PageView from "@/shared/components/layout/page-frame/view/PageView";
+import AuthPageView from "@/shared/components/layout/page-frame/view/AuthPageView";
 
 export default function AuthLayout({
   children
@@ -8,9 +8,9 @@ export default function AuthLayout({
 }>) {
   return (
     <PageContainer>
-      <PageView>
+      <AuthPageView>
         {children}
-      </PageView>
+      </AuthPageView>
     </PageContainer>
 
   );
