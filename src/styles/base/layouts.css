@@ -18,3 +18,8 @@
   /* 섹션 간 간격 같은 큰 단위 spacing */
   --spacing-section: 2.5rem; /* 40px */
 }
+
+@theme {
+  --top-header-height: 4rem; /* 상단 헤더 높이 */
+  --bottom-navigation-height: 5rem; /* 바텀 네비게이션 높이 */
+}
