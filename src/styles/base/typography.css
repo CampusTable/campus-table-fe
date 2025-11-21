@@ -5,13 +5,6 @@
 }
 
 @theme {
-  /* 공통 line-height 토큰 */
-  --line-height-single: 1;
-  --line-height-multi: 1.4;
-
-  /* 공통 letter-spacing 토큰 */
-  --letter-spacing: -0.02rem; /* -0.32 px */
-
   /* 공통 font-size 토큰 */
   --text-2xl: 1.5rem; /* 24px */
   --text-xl: 1.25rem; /* 20px */
@@ -32,4 +25,10 @@
   --font-extralight: 200;
   --font-thin: 100;
 
+  /* 공통 line-height 토큰 */
+  --line-height-single: 1;
+  --line-height-multi: 1.4;
+
+  /* 공통 letter-spacing 토큰 */
+  --letter-spacing: -0.02rem; /* -0.32 px */
 }
