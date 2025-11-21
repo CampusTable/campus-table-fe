@@ -7,15 +7,22 @@ interface UsernameInputProps {
   value: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   disabled?: boolean;
+  hasError?: boolean;
 }
 
 export default function UsernameInput({
   value,
   onChange,
   disabled = false,
+  hasError = false,
 }: UsernameInputProps) {
+
+  const containerClassName: string = hasError
+    ? `${styles.container} ${styles.containerError}`
+    : styles.container;
+
   return (
-    <div className={styles.container}>
+    <div className={containerClassName}>
       <div className={styles.inputWrapper}>
         <input
           id="username"
