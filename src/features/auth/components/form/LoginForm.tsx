@@ -2,6 +2,7 @@
 
 import { ChangeEvent, useState } from "react";
 import UsernameInput from "@/features/auth/components/input/UsernameInput";
+import PasswordInput from "@/features/auth/components/input/PasswordInput";
 
 export default function LoginForm() {
   const [username, setUsername] = useState<string>("");
@@ -16,7 +17,14 @@ export default function LoginForm() {
 
   return (
     <form className="flex flex-col">
-      <UsernameInput value={username} onChange={handleChangeUsername}/>
+      <UsernameInput
+        value={username}
+        onChange={handleChangeUsername}
+      />
+      <PasswordInput
+        value={password}
+        onChange={handleChangePassword}
+      />
     </form>
   );
 };
