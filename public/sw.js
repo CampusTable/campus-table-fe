@@ -1,4 +1,6 @@
 const CACHE_NAME = 'campus-table';
+
+// 오프라인 폴백용으로만 쓸 최소 정적 파일들
 const STATIC_CACHE_URLS = [
   '/',
   '/icons/icon-192x192.png',
@@ -8,69 +10,57 @@ const STATIC_CACHE_URLS = [
   '/icons/badge-72x72.png',
   '/icons/action-close.png',
   '/icons/action-open.png',
-  '/manifest.webmanifest'
+  '/manifest.webmanifest',
 ];
 
-// 설치 이벤트
+// 설치 이벤트: 일단 기본 리소스만 살짝 캐시 (오프라인 대비용)
 self.addEventListener('install', (event) => {
-  console.log('Service Worker: Installing...');
+  console.log('SW: install');
 
   event.waitUntil(
     caches.open(CACHE_NAME)
-    .then((cache) => {
-      console.log('Service Worker: Caching files');
-      return cache.addAll(STATIC_CACHE_URLS);
-    })
-    .then(() => {
-      console.log('Service Worker: Installed');
-      return self.skipWaiting();
-    })
+    .then((cache) => cache.addAll(STATIC_CACHE_URLS))
+    .then(() => self.skipWaiting())
   );
 });
 
-// 활성화 이벤트
+// 활성화 이벤트: 🔥 기존 캐시 전부 삭제
 self.addEventListener('activate', (event) => {
-  console.log('Service Worker: Activating...');
+  console.log('SW: activate');
 
   event.waitUntil(
     caches.keys()
-    .then((cacheNames) => {
-      return Promise.all(
+    .then((cacheNames) =>
+      Promise.all(
         cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            console.log('Service Worker: Deleting old cache', cacheName);
-            return caches.delete(cacheName);
-          }
+          // 이름 상관없이 그냥 싹 다 날려버림 (개발 단계니까 과감하게)
+          console.log('SW: delete cache', cacheName);
+          return caches.delete(cacheName);
         })
-      );
-    })
-    .then(() => {
-      console.log('Service Worker: Activated');
-      return self.clients.claim();
-    })
+      )
+    )
+    .then(() => self.clients.claim())
   );
 });
 
-// Fetch 이벤트 (네트워크 요청 처리)
+// fetch 이벤트: 네트워크 우선, 실패 시에만 캐시 폴백
 self.addEventListener('fetch', (event) => {
-  // GET 요청만 캐시
   if (event.request.method !== 'GET') {
     return;
   }
 
-  // API 요청은 네트워크 우선
-  if (event.request.url.includes('/api/')) {
+  const requestUrl = new URL(event.request.url);
+
+  // API는 네트워크만 사용 (캐시 X)
+  if (requestUrl.pathname.startsWith('/api/')) {
     event.respondWith(
-      fetch(event.request)
-      .catch(() => {
+      fetch(event.request).catch(() => {
         return new Response(
           JSON.stringify({ error: 'Network error' }),
           {
             status: 503,
             statusText: 'Service Unavailable',
-            headers: new Headers({
-              'Content-Type': 'application/json'
-            })
+            headers: { 'Content-Type': 'application/json' },
           }
         );
       })
@@ -78,45 +68,32 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 정적 리소스는 캐시 우선
+  // 그 외 GET: 네트워크 우선
   event.respondWith(
-    caches.match(event.request)
-    .then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-
-      return fetch(event.request)
-      .then((response) => {
-        // 유효한 응답인지 확인
-        if (!response || response.status !== 200 || response.type !== 'basic') {
-          return response;
-        }
-
-        // 응답 복사본을 캐시에 저장
-        const responseToCache = response.clone();
-        caches.open(CACHE_NAME)
-        .then((cache) => {
-          cache.put(event.request, responseToCache);
-        });
-
-        return response;
-      });
+    fetch(event.request)
+    .then((response) => {
+      // 개발 단계에서는 여기서 cache.put 안 함
+      return response;
     })
     .catch(() => {
-      // 오프라인 시 기본 페이지 반환
-      if (event.request.destination === 'document') {
-        return caches.match('/');
-      }
+      // 오프라인일 때만 캐시 폴백
+      return caches.match(event.request).then((cached) => {
+        if (cached) {
+          return cached;
+        }
+        // 문서 요청인데 캐시도 없으면 메인으로 폴백
+        if (event.request.destination === 'document') {
+          return caches.match('/');
+        }
+        return undefined;
+      });
     })
   );
 });
 
-// Push 알림 (향후 확장용)
+// push/notificationclick 코드는 그대로 두어도 됨
 self.addEventListener('push', (event) => {
-  if (!event.data) {
-    return;
-  }
+  if (!event.data) return;
 
   const data = event.data.json();
   const options = {
@@ -126,33 +103,17 @@ self.addEventListener('push', (event) => {
     vibrate: [100, 50, 100],
     data: data.data || {},
     actions: [
-      {
-        action: 'open',
-        title: '열기',
-        icon: '/icons/action-open.png'
-      },
-      {
-        action: 'close',
-        title: '닫기',
-        icon: '/icons/action-close.png'
-      }
-    ]
+      { action: 'open', title: '열기', icon: '/icons/action-open.png' },
+      { action: 'close', title: '닫기', icon: '/icons/action-close.png' },
+    ],
   };
 
-  event.waitUntil(
-    self.registration.showNotification(data.title, options)
-  );
+  event.waitUntil(self.registration.showNotification(data.title, options));
 });
 
-// 알림 클릭 처리
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
+  if (event.action === 'close') return;
 
-  if (event.action === 'close') {
-    return;
-  }
-
-  event.waitUntil(
-    self.clients.openWindow('/')
-  );
+  event.waitUntil(self.clients.openWindow('/'));
 });
