@@ -12,7 +12,7 @@ export default function AdBannerTag({
   return (
     <div className={styles.container}>
       <div className={styles.label}>
-        {currentIndex} / {totalCount}
+        {currentIndex + 1} / {totalCount}
       </div>
     </div>
   );
