@@ -1,0 +1,21 @@
+.container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 345 / 194;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.tagWrapper {
+  position: absolute;
+  right: calc(var(--spacing) * 4); /* 1rem */
+  bottom: calc(var(--spacing) * 3); /* 0.75rem */
+}
