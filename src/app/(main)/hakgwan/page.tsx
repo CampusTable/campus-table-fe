@@ -1,6 +1,9 @@
+"use client";
+
 import AdBannerCarousel from "@/features/banner/components/AdBannerCarousel";
 import MenuCard from "@/features/menu/card/MenuCard";
 import SeparationBar from "@/features/menu/bar/SeparationBar";
+import OrderSummaryBar from "@/features/menu/bar/OrderSummaryBar";
 
 export default function HakgwanMainPage() {
   return (
@@ -63,6 +66,10 @@ export default function HakgwanMainPage() {
         price={6000}
         rank={3}
         soldOut={true}
+      />
+      <OrderSummaryBar
+        totalPrice={15900}
+        itemCount={3}
       />
     </div>
   );
