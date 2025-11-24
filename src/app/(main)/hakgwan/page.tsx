@@ -1,5 +1,6 @@
 import AdBannerCarousel from "@/features/banner/components/AdBannerCarousel";
 import PopularTag from "@/features/menu/tags/components/PopularTag";
+import SoldOutTag from "@/features/menu/tags/components/SoldOutTag";
 
 export default function HakgwanMainPage() {
   return (
@@ -12,6 +13,8 @@ export default function HakgwanMainPage() {
       <PopularTag rank={2}/>
       <div className="h-10"/>
       <PopularTag rank={3}/>
+      <div className="h-10"/>
+      <SoldOutTag/>
     </>
   );
 };
