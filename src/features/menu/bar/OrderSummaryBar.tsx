@@ -18,10 +18,6 @@ export default function OrderSummaryBar({
 
   const router = useRouter();
 
-  if (!totalPrice || !itemCount) {
-    return;
-  }
-
   const handleCartButtonClick: MouseEventHandler<HTMLButtonElement> = () => {
     router.replace("/cart");
   }
