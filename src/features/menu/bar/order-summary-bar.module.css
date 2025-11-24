@@ -1,0 +1,52 @@
+.wrapper {
+  position: fixed;
+  bottom: var(--bottom-safe-navigation-height);
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 100%;
+  max-width: var(--container-3xl);
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+  height: 4.5rem;
+
+  padding-inline: 1.5rem;
+
+  border-radius: 1.25rem 1.5rem 0 0;
+  background-color: var(--color-white);
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.20);
+}
+
+.labelWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 2); /* 0.5rem */
+}
+
+.label {
+  color: var(--color-gray-600);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  line-height: var(--line-height-single);
+  letter-spacing: var(--letter-spacing);
+}
+
+.totalPrice {
+  color: var(--color-black);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  line-height: var(--line-height-single);
+  letter-spacing: var(--letter-spacing);
+}
+
+.buttonWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
