@@ -1,6 +1,6 @@
 import AdBannerCarousel from "@/features/banner/components/AdBannerCarousel";
 import MenuCard from "@/features/menu/card/MenuCard";
-import SeparationBar from "@/features/menu/card/SeparationBar";
+import SeparationBar from "@/features/menu/bar/SeparationBar";
 
 export default function HakgwanMainPage() {
   return (
