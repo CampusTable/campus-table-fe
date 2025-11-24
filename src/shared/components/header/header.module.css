@@ -10,6 +10,8 @@
 
   padding-top: var(--safe-top); /* safe-top 만큼 padding */
   padding-inline: 1.5rem;
+
+  z-index: 40;
 }
 
 .container {

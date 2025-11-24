@@ -1,3 +1,4 @@
+export { default as AddMenuButton } from "./add-menu-button.svg";
 export { default as ErrorCircleFilled } from "./error-circle-filled.svg";
 export { default as EyesHideIcon } from "./eyes-hide.svg";
 export { default as EyesSeeIcon } from "./eyes-see.svg";
