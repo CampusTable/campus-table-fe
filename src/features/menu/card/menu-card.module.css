@@ -1,0 +1,65 @@
+.container {
+  display: flex;
+  position: relative;
+  gap: calc(var(--spacing) * 4);
+
+  width: 100%;
+
+  background-color: var(--color-white);
+  padding: calc(var(--spacing) * 4) calc(var(--spacing) * 3); /* 1rem 0.75rem */
+}
+
+.imageWrapper {
+  position: relative;
+  width: 6.25rem;
+  height: 6.25rem;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.tagWrapper {
+  display: flex;
+  gap: var(--spacing); /* 0.25rem */
+}
+
+.labelWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 2);
+
+  padding-top: calc(var(--spacing) * 3);
+}
+
+.labelWrapperWithTag {
+  padding-top: calc(var(--spacing)); /* 0.25rem */
+}
+
+.title {
+  color: var(--color-black);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  line-height: var(--line-height-single);
+  letter-spacing: var(--letter-spacing);
+}
+
+.price {
+  color: var(--color-black);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  line-height: var(--line-height-single);
+  letter-spacing: var(--letter-spacing);
+}
+
+.button {
+  position: absolute;
+  right: calc(var(--spacing) * 3); /* 0.75 rem */
+  bottom: 1.19rem;
+}
+
+.soldOut {
+  opacity: 0.5;
+}
