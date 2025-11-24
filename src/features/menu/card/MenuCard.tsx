@@ -1,3 +1,5 @@
+"use client";
+
 import styles from "./menu-card.module.css";
 import Image from "next/image";
 import { formatNumberWithComma } from "@/shared/utils/number/utils";
@@ -25,7 +27,9 @@ export default function MenuCard({
   onClickAdd,
 }: MenuCardProps) {
 
-  const labelWrapperClassName: string = soldOut || rank
+  const hasTag: boolean = soldOut || typeof rank !== "undefined";
+
+  const labelWrapperClassName: string = hasTag
     ? `${styles.labelWrapper} ${styles.labelWrapperWithTag}`
     : styles.labelWrapper;
 
@@ -38,8 +42,17 @@ export default function MenuCard({
     : styles.price;
 
   const imageClassName: string = soldOut
-    ? `${styles.image} ${styles.image}`
+    ? `${styles.image} ${styles.soldOut}`
     : styles.image;
+
+  const handleOnClickAdd = ():void => {
+    if (soldOut) {
+      return;
+    }
+    // TODO: 임시 버튼 이벤트 (추후 교체)
+    // onClickAdd();
+    alert("버튼클릭~");
+  }
 
   return (
     <div className={styles.container}>
@@ -53,7 +66,7 @@ export default function MenuCard({
       </div>
 
       <div className={labelWrapperClassName}>
-        {(soldOut || rank) && (
+        {hasTag && (
           <div className={styles.tagWrapper}>
             {soldOut && <SoldOutTag />}
             {rank && <PopularTag rank={rank} />}
@@ -70,7 +83,7 @@ export default function MenuCard({
       {!soldOut && (
         <button
           type="button"
-          onClick={onClickAdd}
+          onClick={handleOnClickAdd}
           className={styles.button}
         >
           <AddMenuButton />
