@@ -1,5 +1,5 @@
 import { EyesHideIcon, EyesSeeIcon } from "@/assets/icons";
-import styles from "./password-visible-icon.module.css";
+import styles from "./PasswordVisibleIcon.module.css";
 
 interface PasswordVisibleIconProps {
   onClick: () => void;
