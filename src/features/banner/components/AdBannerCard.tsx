@@ -1,6 +1,6 @@
 import AdBannerTag from "@/features/banner/components/AdBannerTag";
 import Image from "next/image";
-import styles from "./ad-banner-card.module.css";
+import styles from "./AdBannerCard.module.css";
 
 interface AdBannerCardProps {
   currentIndex: number;
