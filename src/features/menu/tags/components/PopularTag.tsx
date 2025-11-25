@@ -1,4 +1,4 @@
-import styles from "./popular-tag.module.css";
+import styles from "./PopularTag.module.css";
 
 type Rank = 1 | 2 | 3;
 
