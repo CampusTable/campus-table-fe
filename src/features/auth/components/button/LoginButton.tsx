@@ -1,4 +1,4 @@
-import styles from "./login-button.module.css";
+import styles from "./LoginButton.module.css";
 import LoadingDots from "@/shared/components/loading/dot/LoadingDots";
 
 interface LoginButtonProps {
