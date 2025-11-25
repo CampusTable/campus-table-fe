@@ -3,7 +3,7 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import UsernameInput from "@/features/auth/components/input/UsernameInput";
 import PasswordInput from "@/features/auth/components/input/PasswordInput";
-import styles from "./login-form.module.css";
+import styles from "./LoginForm.module.css";
 import LoginButton from "@/features/auth/components/button/LoginButton";
 import { isDisabled, isValidSubmit } from "@/features/auth/utils/form/loginFormUtils";
 import LoginFormErrorLabel from "@/features/auth/components/label/LoginFormErrorLabel";
