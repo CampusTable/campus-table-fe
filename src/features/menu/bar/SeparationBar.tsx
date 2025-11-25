@@ -1,4 +1,4 @@
-import styles from "./separation-bar.module.css";
+import styles from "./SeparationBar.module.css";
 
 export default function SeparationBar() {
   return (
