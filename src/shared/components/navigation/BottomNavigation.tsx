@@ -14,7 +14,7 @@ import {
 } from "@/assets/icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import styles from "./bottom-navigation.module.css"
+import styles from "./BottomNavigation.module.css"
 import { ComponentType, SVGProps } from "react";
 
 interface Item {
