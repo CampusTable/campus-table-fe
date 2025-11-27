@@ -1,8 +1,7 @@
-import { API_BASE_URL } from "@/shared/lib/types/types";
 import { handleErrorResponse } from "@/shared/lib/errors/errorResponse";
-import { ErrorCode } from "@/shared/lib/errors/errorCodes";
 import { CustomError } from "@/shared/lib/errors/customError";
-
+import { ErrorCode } from "@/shared/lib/errors/errorCodes";
+import { API_BASE_URL } from "@/shared/lib/types/envUrls";
 
 export class ApiServer {
   private readonly baseUrl: string;
@@ -40,7 +39,7 @@ export class ApiServer {
         await handleErrorResponse(response);
       }
 
-      if (response.status === 204 || response.status === 205 || response.status === 304) {
+      if (response.status === 204 || response.status === 205) {
         return undefined as T;
       }
 
