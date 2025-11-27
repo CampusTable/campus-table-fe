@@ -59,7 +59,7 @@ export function createProxy(config: ProxyConfig): ProxyHandler {
 
   return async (request: NextRequest, context: ProxyContext): Promise<Response> => {
     try {
-      const { path: segments } = context.params;
+      const { path: segments } = await context.params;
       const path: string = Array.isArray(segments) ? segments.join("/") : "";
       const apiPath: string = path.startsWith("api/") ? path : `api/${path}`;
       const requestUrl: URL = new URL(request.url);

@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 
 export interface ProxyContext {
-  readonly params: { path: string[] };
+  readonly params: Promise<{ path: string[] }>;
 }
 
 export interface ProxyConfig {
