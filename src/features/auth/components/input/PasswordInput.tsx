@@ -1,7 +1,7 @@
 'use client';
 
 import { ChangeEvent, useState } from "react";
-import styles from "./password-input.module.css";
+import styles from "./PasswordInput.module.css";
 import PasswordVisibleIcon from "@/features/auth/components/icon/PasswordVisibleIcon";
 
 interface PasswordInputProps {

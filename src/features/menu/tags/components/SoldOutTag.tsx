@@ -1,4 +1,4 @@
-import styles from "./sold-out-tag.module.css";
+import styles from "./SoldOutTag.module.css";
 
 export default function SoldOutTag() {
   return (

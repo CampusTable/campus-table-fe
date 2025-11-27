@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./auth-page-view.module.css";
+import styles from "./AuthPageView.module.css";
 
 export default function AuthPageView({
   children

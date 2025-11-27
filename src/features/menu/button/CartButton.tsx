@@ -1,5 +1,5 @@
 import React, { ComponentType, MouseEventHandler } from "react";
-import styles from "./cart-button.module.css";
+import styles from "./CartButton.module.css";
 import {
   RoundedNumber1,
   RoundedNumber2,
