@@ -3,10 +3,12 @@ import styles from "./LoginFormErrorLabel.module.css";
 
 interface LoginFormErrorLabelProps {
   visible?: boolean;
+  message: string;
 }
 
 export default function LoginFormErrorLabel({
   visible = false,
+  message,
 }: LoginFormErrorLabelProps) {
 
   const containerClassName: string = visible
@@ -16,7 +18,7 @@ export default function LoginFormErrorLabel({
   return (
     <div className={containerClassName}>
       <ErrorCircleFilled />
-      <span className={styles.label}>학번 및 비밀번호를 다시 확인하세요</span>
+      <span className={styles.label}>{message}</span>
     </div>
   );
 }

@@ -10,7 +10,7 @@ import LoginFormErrorLabel from "@/features/auth/components/label/LoginFormError
 import { login, LoginRequest } from "@/features/auth/api/loginApi";
 import { useRouter } from "next/navigation";
 import { CustomError } from "@/shared/lib/errors/customError";
-import { ErrorCode } from "@/shared/lib/errors/errorCodes";
+import { ERROR_MESSAGE } from "@/shared/lib/errors/errorCodes";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -19,6 +19,7 @@ export default function LoginForm() {
   const [password, setPassword] = useState<string>("");
 
   const [error, setError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleChangeUsername = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -42,6 +43,7 @@ export default function LoginForm() {
     event.preventDefault();
 
     if (!isValidSubmit(username, password)) {
+      setErrorMessage(ERROR_MESSAGE.AUTH_FAILED);
       setError(true);
       return;
     }
@@ -58,9 +60,7 @@ export default function LoginForm() {
       router.replace("/");
     } catch (error) {
       if (error instanceof CustomError) {
-        if (error.errorCode === ErrorCode.UNAUTHORIZED) {
-          // TODO: 엑세스 토큰 재발급
-        }
+        setErrorMessage(error.errorMessage);
       }
       setError(true);
     } finally {
@@ -89,7 +89,10 @@ export default function LoginForm() {
           />
         </div>
       </div>
-      <LoginFormErrorLabel visible={error} />
+      <LoginFormErrorLabel
+        visible={error}
+        message={errorMessage}
+      />
       <div className={styles.buttonContainer}>
         <LoginButton
           disabled={isDisabled(username, password, loading)}
