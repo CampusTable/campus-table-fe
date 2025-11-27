@@ -21,6 +21,8 @@ jobs:
             echo -e "${{ secrets.ENV_MAIN }}" > .env.production
           elif [ "${{ github.ref_name }}" == "test" ]; then
             echo -e "${{ secrets.ENV_TEST }}" > .env.production
+          else
+            echo -e "${{ secrets.ENV_MAIN }}" > .env.production
           fi
 
       - name: Set up Node.js
