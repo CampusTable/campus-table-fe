@@ -7,8 +7,15 @@ import styles from "./LoginForm.module.css";
 import LoginButton from "@/features/auth/components/button/LoginButton";
 import { isDisabled, isValidSubmit } from "@/features/auth/utils/form/loginFormUtils";
 import LoginFormErrorLabel from "@/features/auth/components/label/LoginFormErrorLabel";
+import { login, LoginRequest } from "@/features/auth/api/loginApi";
+import { useRouter, useSearchParams } from "next/navigation";
+import { CustomError } from "@/shared/lib/errors/customError";
+import { ErrorCode } from "@/shared/lib/errors/errorCodes";
 
 export default function LoginForm() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
@@ -32,7 +39,7 @@ export default function LoginForm() {
     }
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!isValidSubmit(username, password)) {
@@ -41,10 +48,31 @@ export default function LoginForm() {
     }
 
     setError(false);
-    // TODO: 로그인 API 연결
-    // 임시로 버튼 클릭시 3초동안 로딩 상태
     setLoading(true);
-    setTimeout(() => setLoading(false), 3000);
+    try {
+      const request: LoginRequest = {
+        sejongPortalId: username,
+        sejongPortalPw: password
+      };
+      await login(request);
+
+      const fallbackUrl: string = "/";
+
+      const callbackUrlParam: string | null = searchParams.get("callbackUrl");
+      const nextUrl: string = callbackUrlParam && callbackUrlParam.length > 0
+        ? callbackUrlParam
+        : fallbackUrl;
+      router.replace(nextUrl);
+    } catch (error) {
+      if (error instanceof CustomError) {
+        if (error.errorCode === ErrorCode.UNAUTHORIZED) {
+          // 엑세스 토큰 재발급
+        }
+      }
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -68,7 +96,7 @@ export default function LoginForm() {
           />
         </div>
       </div>
-      <LoginFormErrorLabel visible={error}/>
+      <LoginFormErrorLabel visible={error} />
       <div className={styles.buttonContainer}>
         <LoginButton
           disabled={isDisabled(username, password, loading)}
