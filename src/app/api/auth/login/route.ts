@@ -28,9 +28,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     const responseBody: LoginApiResponse = await upstream.json();
 
-    // 엑세스 토큰 쿠키 저장
-    const response: NextResponse = NextResponse.json(responseBody);
+    const response: NextResponse = NextResponse.json(responseBody, { status: upstream.status });
 
+    // 엑세스 토큰 쿠키 저장
     response.cookies.set("accessToken", responseBody.accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // production 환경에서만 'secure = true'
