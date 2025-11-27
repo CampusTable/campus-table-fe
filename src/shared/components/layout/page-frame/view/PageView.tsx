@@ -1,4 +1,4 @@
-import styles from "./page-view.module.css";
+import styles from "./PageView.module.css";
 
 export default function PageView({
   children

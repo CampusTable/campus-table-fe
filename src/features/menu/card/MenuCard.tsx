@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "./menu-card.module.css";
+import styles from "./MenuCard.module.css";
 import Image from "next/image";
 import { formatNumberWithComma } from "@/shared/utils/number/utils";
 import { AddMenuButton } from "@/assets/icons";

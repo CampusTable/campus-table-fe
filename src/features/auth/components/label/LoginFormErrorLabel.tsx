@@ -1,5 +1,5 @@
 import { ErrorCircleFilled } from "@/assets/icons";
-import styles from "./login-form-error-label.module.css";
+import styles from "./LoginFormErrorLabel.module.css";
 
 interface LoginFormErrorLabelProps {
   visible?: boolean;

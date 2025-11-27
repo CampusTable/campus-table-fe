@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "./order-summary-bar.module.css";
+import styles from "./OrderSummaryBar.module.css";
 import { formatNumberWithComma } from "@/shared/utils/number/utils";
 import CartButton, { ItemCount } from "@/features/menu/button/CartButton";
 import { useRouter } from "next/navigation";

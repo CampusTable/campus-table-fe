@@ -1,4 +1,4 @@
-import styles from "./ad-banner-tag.module.css";
+import styles from "./AdBannerTag.module.css";
 
 interface AdBannerTagProps {
   currentIndex: number;

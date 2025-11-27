@@ -1,5 +1,5 @@
 import { ShoppingBag } from "@/assets/icons";
-import styles from "./header.module.css";
+import styles from "./Header.module.css";
 
 export default function Header() {
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 import AdBannerCard from "@/features/banner/components/AdBannerCard";
-import styles from "./ad-banner-carousel.module.css";
+import styles from "./AdBannerCarousel.module.css";
 import { Banner, BANNERS } from "@/features/banner/types/banner";
 import { useBannerCarousel } from "@/features/banner/hooks/useBannerCarousel";
 
