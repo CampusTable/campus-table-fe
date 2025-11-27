@@ -8,13 +8,12 @@ import LoginButton from "@/features/auth/components/button/LoginButton";
 import { isDisabled, isValidSubmit } from "@/features/auth/utils/form/loginFormUtils";
 import LoginFormErrorLabel from "@/features/auth/components/label/LoginFormErrorLabel";
 import { login, LoginRequest } from "@/features/auth/api/loginApi";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { CustomError } from "@/shared/lib/errors/customError";
 import { ErrorCode } from "@/shared/lib/errors/errorCodes";
 
 export default function LoginForm() {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -56,17 +55,11 @@ export default function LoginForm() {
       };
       await login(request);
 
-      const fallbackUrl: string = "/";
-
-      const callbackUrlParam: string | null = searchParams.get("callbackUrl");
-      const nextUrl: string = callbackUrlParam && callbackUrlParam.length > 0
-        ? callbackUrlParam
-        : fallbackUrl;
-      router.replace(nextUrl);
+      router.replace("/");
     } catch (error) {
       if (error instanceof CustomError) {
         if (error.errorCode === ErrorCode.UNAUTHORIZED) {
-          // 엑세스 토큰 재발급
+          // TODO: 엑세스 토큰 재발급
         }
       }
       setError(true);
