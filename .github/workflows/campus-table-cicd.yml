@@ -28,7 +28,7 @@ jobs:
             echo -e "${{ secrets.ENV_MAIN }}" > .env.production
           elif [ "${{ github.ref_name }}" == "test" ]; then
             echo -e "${{ secrets.ENV_TEST }}" > .env.production
-          else;
+          else
             echo -e "${{ secrets.ENV_MAIN }}" > .env.production
           fi
 
