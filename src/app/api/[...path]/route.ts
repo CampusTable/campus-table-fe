@@ -1,7 +1,7 @@
-import { API_BASE_URL } from "@/shared/lib/types/types";
 import { createProxy } from "@/shared/lib/bff/proxy";
 import { NextRequest } from "next/server";
 import { ProxyContext } from "@/shared/lib/bff/proxyTypes";
+import { API_BASE_URL } from "@/shared/lib/types/envUrls";
 
 const proxy = createProxy({
   backendBaseUrl: API_BASE_URL,
