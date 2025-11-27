@@ -23,10 +23,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     });
 
     if (!upstream.ok) {
-      return NextResponse.json(await upstream.json());
+      return NextResponse.json(await upstream.json(), { status: upstream.status });
     }
 
-    const responseBody: LoginApiResponse = await upstream.json();
+    const responseBody: LoginApiResponse = (await upstream.json()) as LoginApiResponse;
 
     const response: NextResponse = NextResponse.json(responseBody, { status: upstream.status });
 
