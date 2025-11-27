@@ -9,4 +9,6 @@
   --transition-height-fast: height var(--transition-duration-fast) var(--transition-ease-out);
   --transition-color-fast: color var(--transition-duration-fast) var(--transition-ease-out);
   --transition-font-weight-fast: font-weight var(--transition-duration-fast) var(--transition-ease-out);
+  --transition-opacity-fast: opacity var(--transition-duration-fast) var(--transition-ease-out);
+  --transition-transform-fast: transform var(--transition-duration-fast) var(--transition-ease-out);
 }
