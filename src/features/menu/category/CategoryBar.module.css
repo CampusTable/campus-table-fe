@@ -1,0 +1,14 @@
+.wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  margin-inline: calc(var(--spacing-gutter) * -1);
+}
+
+.scrollContainer {
+  display: inline-flex;
+  gap: calc(var(--spacing) * 2); /* 0.5rem */
+
+  padding-block: 0.75rem;
+  padding-inline: 1.5rem;
+}
