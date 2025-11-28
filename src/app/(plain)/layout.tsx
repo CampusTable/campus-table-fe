@@ -1,17 +1,17 @@
+import React from "react";
 import PageContainer from "@/shared/components/layout/page-frame/container/PageContainer";
-import AuthPageView from "@/shared/components/layout/page-frame/view/AuthPageView";
+import PageView from "@/shared/components/layout/page-frame/view/PageView";
 
-export default function AuthLayout({
+export default function PlainLayout({
   children
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
     <PageContainer>
-      <AuthPageView>
+      <PageView variant="plain">
         {children}
-      </AuthPageView>
+      </PageView>
     </PageContainer>
-
   );
-}
+};
