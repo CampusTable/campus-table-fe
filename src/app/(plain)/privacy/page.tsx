@@ -159,7 +159,7 @@ export default function PrivacyPolicyPage() {
 
       <div className="mt-12 flex gap-3">
         <Link
-          href="/"
+          href="/public"
           className="rounded-lg border border-gray-300 px-4 py-2 hover:bg-gray-50"
         >
           홈으로
