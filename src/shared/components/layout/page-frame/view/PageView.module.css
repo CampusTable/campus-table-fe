@@ -10,10 +10,26 @@
 
   max-width: var(--container-3xl);
 
-  padding-top: var(--top-safe-header-height);
-  padding-bottom: var(--bottom-safe-navigation-height);
   padding-inline: var(--spacing-gutter);
 
   overflow-y: auto;
   overscroll-behavior-y: contain;
+}
+
+/* 헤더/네비/하단바 없는 기본 페이지 */
+.containerPlain {
+  padding-top: var(--safe-top);
+  padding-bottom: var(--safe-bottom);
+}
+
+/* 헤더만 있는 페이지 */
+.containerHeaderOnly {
+  padding-top: var(--top-safe-header-height);
+  padding-bottom: var(--safe-bottom);
+}
+
+/* 헤더 + 하단 네비게이션 */
+.containerHeaderNav {
+  padding-top: var(--top-safe-header-height);
+  padding-bottom: var(--bottom-safe-navigation-height);
 }
