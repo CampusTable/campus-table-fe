@@ -1,0 +1,13 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.menuCardWrapper {
+  padding-inline: calc(var(--spacing) * 3); /* 0.75rem */
+}
+
+.separatorWrapper {
+  padding-block: calc(var(--spacing) * 4); /* 1rem */
+}
