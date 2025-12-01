@@ -1,10 +1,11 @@
 "use client";
 
 import AdBannerCarousel from "@/features/banner/components/AdBannerCarousel";
-import MenuCard from "@/features/menu/card/MenuCard";
-import SeparationBar from "@/features/menu/bar/SeparationBar";
 import OrderSummaryBar from "@/features/menu/bar/OrderSummaryBar";
 import CategoryBar from "@/features/menu/category/CategoryBar";
+import MenuList from "@/features/menu/list/components/MenuList";
+import { MenuListItem } from "@/features/menu/list/types/menuListType";
+import styles from "./page.module.css";
 
 const CATEGORIES = [
   { id: "narutto", label: "나루또" },
@@ -14,71 +15,30 @@ const CATEGORIES = [
   { id: "takeout", label: "테이크 아웃" },
 ];
 
+const ITEMS: MenuListItem[] = [
+  { id: "1", imageSrc: "/tmp/menu/menu-1.png", title: "치즈 고구마 돈까스", price: 6000},
+  { id: "2", imageSrc: "/tmp/menu/menu-1.png", title: "치즈 고구마 돈까스", price: 6000, rank: 1},
+  { id: "3", imageSrc: "/tmp/menu/menu-1.png", title: "치즈 고구마 돈까스", price: 6000, rank: 2},
+  { id: "4", imageSrc: "/tmp/menu/menu-1.png", title: "치즈 고구마 돈까스", price: 6000, rank: 3},
+  { id: "5", imageSrc: "/tmp/menu/menu-1.png", title: "치즈 고구마 돈까스", price: 6000, rank: 1, soldOut: true},
+  { id: "6", imageSrc: "/tmp/menu/menu-1.png", title: "치즈 고구마 돈까스", price: 6000, rank: 2, soldOut: true},
+  { id: "7", imageSrc: "/tmp/menu/menu-1.png", title: "치즈 고구마 돈까스", price: 6000, rank: 3, soldOut: true},
+];
+
 export default function HakgwanMainPage() {
   return (
-    <div className="w-full">
-      <div>학생회관 메인 페이지</div>
-      <AdBannerCarousel />
+    <div className={styles.container}>
+      <div className={styles.adBannerWrapper}>
+        <AdBannerCarousel />
+      </div>
 
-      <CategoryBar categories={CATEGORIES} />
+      <div className={styles.categoryBarWrapper}>
+        <CategoryBar categories={CATEGORIES} />
+      </div>
 
-      <MenuCard
-        imageSrc="/tmp/menu/menu-1.png"
-        title="치즈 고구마 돈까스"
-        price={6000}
-      />
-      <SeparationBar />
-      <MenuCard
-        imageSrc="/tmp/menu/menu-1.png"
-        title="치즈 고구마 돈까스"
-        price={6000}
-        rank={1}
-      />
-      <SeparationBar />
-      <MenuCard
-        imageSrc="/tmp/menu/menu-1.png"
-        title="치즈 고구마 돈까스"
-        price={6000}
-        rank={2}
-      />
-      <SeparationBar />
-      <MenuCard
-        imageSrc="/tmp/menu/menu-1.png"
-        title="치즈 고구마 돈까스"
-        price={6000}
-        rank={3}
-      />
-      <SeparationBar />
-      <MenuCard
-        imageSrc="/tmp/menu/menu-1.png"
-        title="치즈 고구마 돈까스"
-        price={6000}
-        soldOut={true}
-      />
-      <SeparationBar />
-      <MenuCard
-        imageSrc="/tmp/menu/menu-1.png"
-        title="치즈 고구마 돈까스"
-        price={6000}
-        rank={1}
-        soldOut={true}
-      />
-      <SeparationBar />
-      <MenuCard
-        imageSrc="/tmp/menu/menu-1.png"
-        title="치즈 고구마 돈까스"
-        price={6000}
-        rank={2}
-        soldOut={true}
-      />
-      <SeparationBar />
-      <MenuCard
-        imageSrc="/tmp/menu/menu-1.png"
-        title="치즈 고구마 돈까스"
-        price={6000}
-        rank={3}
-        soldOut={true}
-      />
+      <div className={styles.menuListWrapper}>
+        <MenuList items={ITEMS} />
+      </div>
       <OrderSummaryBar
         totalPrice={15900}
         itemCount={3}
