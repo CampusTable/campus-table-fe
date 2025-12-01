@@ -4,6 +4,7 @@ import AdBannerCard from "@/features/banner/components/AdBannerCard";
 import styles from "./AdBannerCarousel.module.css";
 import { Banner, BANNERS } from "@/features/banner/types/banner";
 import { useBannerCarousel } from "@/features/banner/hooks/useBannerCarousel";
+import AdBannerTag from "@/features/banner/components/AdBannerTag";
 
 const TOTAL_BANNER_COUNT: number = BANNERS.length;
 
@@ -36,6 +37,9 @@ export default function AdBannerCarousel() {
     ? `${styles.track} ${styles.trackAnimated}`
     : styles.track;
 
+  const logicalCurrentIndex: number =
+    (bannerNumber - 1 + TOTAL_BANNER_COUNT) % TOTAL_BANNER_COUNT;
+
   return (
     <div className={styles.container}>
       <div
@@ -51,17 +55,12 @@ export default function AdBannerCarousel() {
           onTransitionEnd={handleTransitionEnd}
         >
           {RENDER_BANNERS.map((banner: Banner, index: number) => {
-            const logicalIndex: number =
-              (index - 1 + TOTAL_BANNER_COUNT) % TOTAL_BANNER_COUNT;
-
             return (
               <div
                 key={`${banner.id} - ${index}`}
                 className={styles.slide}
               >
                 <AdBannerCard
-                  currentIndex={logicalIndex}
-                  totalCount={TOTAL_BANNER_COUNT}
                   imageUrl={banner.imageSrc}
                   alt={banner.alt}
                 />
@@ -69,6 +68,13 @@ export default function AdBannerCarousel() {
             );
           })}
         </div>
+      </div>
+
+      <div className={styles.tagWrapper}>
+        <AdBannerTag
+          currentIndex={logicalCurrentIndex}
+          totalCount={TOTAL_BANNER_COUNT}
+        />
       </div>
     </div>
   );
