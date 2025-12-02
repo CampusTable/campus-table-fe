@@ -5,8 +5,10 @@ import { API_BASE_URL } from "@/shared/lib/types/envUrls";
 
 const proxy = createProxy({
   backendBaseUrl: API_BASE_URL,
-  promoteCookieToAuth: { cookieName: 'accessToken', overwriteIfExists: false },
+  // promoteCookieToAuth: { cookieName: 'accessToken', overwriteIfExists: false },
   excludedRequestHeaders: ['content-length'],
+  useSessionAuth: true,
+  sessionCookieName: "sid",
 });
 
 export async function GET(req: NextRequest, ctx: ProxyContext): Promise<Response> {
