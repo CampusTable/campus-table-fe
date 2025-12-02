@@ -1,10 +1,6 @@
 import { apiClient } from "@/shared/lib/api/apiClient";
+import { LoginRequest, LoginResponse } from "@/features/auth/types/loginTypes";
 
-export interface LoginRequest {
-  sejongPortalId: string;
-  sejongPortalPw: string;
-}
-
-export async function login(request: LoginRequest):Promise<void> {
+export async function login(request: LoginRequest):Promise<LoginResponse> {
   return await apiClient.post("/api/auth/login", request);
 }

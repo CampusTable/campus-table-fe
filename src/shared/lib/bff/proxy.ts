@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { ProxyConfig, ProxyContext, ProxyHandler } from "@/shared/lib/bff/proxyTypes";
 import { BodyInit } from "undici-types";
 import { ErrorCode } from "@/shared/lib/errors/errorCodes";
+import { deleteSession, getSession, updateSession } from "@/shared/lib/session/sessionStore";
+import { ReissueRequest, ReissueResponse } from "@/features/auth/types/reissueTypes";
+import { isProduction } from "@/shared/utils/env/envConfig";
 
 /**
  * URL 안전 결합 (중복 슬레시 제거)
@@ -51,6 +54,24 @@ function buildUpstreamHeaders(
 }
 
 /**
+ * 세션 삭제 + sid 쿠키 제거 + 로그인페이지 리다이렉트
+ */
+function redirectLogin(request: NextRequest, sessionCookieName: string) {
+  const loginUrl: URL = new URL("/login", request.url);
+  const response: NextResponse = NextResponse.redirect(loginUrl);
+  response.cookies.set(sessionCookieName, "", {
+    httpOnly: isProduction(),
+    secure: isProduction(),
+    sameSite: "strict",
+    path: "/",
+    domain: isProduction() ? "campustable.shop" : "",
+    maxAge: 0
+  });
+
+  return response;
+}
+
+/**
  * 중앙 프록시 팩토리
  */
 export function createProxy(config: ProxyConfig): ProxyHandler {
@@ -70,17 +91,106 @@ export function createProxy(config: ProxyConfig): ProxyHandler {
 
       const upstreamHeaders: Headers = buildUpstreamHeaders(request, backendHost, config);
 
+      const sessionCookieName: string = config.sessionCookieName ?? "sid";
+
+      // 세션 기반 인증 처리 (sid -> Redis 세션 -> accessToken -> Authorization)
+      if (config.useSessionAuth === true) {
+        const sessionId: string | undefined = request.cookies.get(sessionCookieName)?.value;
+
+        if (sessionId && sessionId.length > 0) {
+          const session = await getSession(sessionId);
+
+          if (session && session.accessToken.length > 0) {
+            upstreamHeaders.set("authorization", `Bearer ${session.accessToken}`);
+          }
+        }
+      }
+
       // body 처리
       let body: BodyInit | undefined = undefined;
       if (request.method !== "GET" && request.method !== "HEAD" && request.body) {
         body = await request.text();
       }
 
-      const upstream = await fetch(target, {
+      let upstream: Response = await fetch(target, {
         method: request.method,
         headers: upstreamHeaders,
         body,
       });
+
+      const isAuthReissuePath: boolean = apiPath === "api/auth/reissue";
+      const isAuthLoginPath: boolean = apiPath === "api/auth/login";
+
+      if (config.useSessionAuth === true && upstream.status === 401 && !isAuthLoginPath && !isAuthReissuePath) {
+        const sessionId: string | undefined = request.cookies.get(sessionCookieName)?.value;
+        if (!sessionId || sessionId.length === 0) {
+          return redirectLogin(request, sessionCookieName);
+        }
+
+        const session = await getSession(sessionId);
+        if (!session || session.refreshToken.length === 0) {
+          await deleteSession(sessionId);
+          return redirectLogin(request, sessionCookieName);
+        }
+
+        // reissue 엔드포인트 호출
+        const reissueUrl: string = joinUrl(config.backendBaseUrl, "api/auth/reissue", "");
+        console.log("[BFF] reissue 시도: ", reissueUrl);
+        let reissueResponse: Response;
+        const reissueRequest: ReissueRequest = { refreshToken: session.refreshToken };
+        try {
+          reissueResponse = await fetch(reissueUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(reissueRequest),
+          });
+        } catch (error) {
+          console.error("[BFF] reissue 중 오류 발생:", error);
+          await deleteSession(sessionId);
+          return redirectLogin(request, sessionCookieName);
+        }
+
+        if (!reissueResponse.ok) {
+          console.error("[BFF] reissue 실패, status:", reissueResponse.status);
+          try {
+            const errorBody = await reissueResponse.clone().json();
+            console.error("[BFF] reissue 실패 응답:", errorBody);
+          } catch {
+            // 무시
+          }
+          await deleteSession(sessionId);
+          return redirectLogin(request, sessionCookieName);
+        }
+
+        let reissueBody: ReissueResponse;
+        try {
+          reissueBody = (await reissueResponse.json()) as ReissueResponse;
+        } catch (error) {
+          console.error("[BFF] reissue 응답 JSON 파싱 오류:", error);
+          await deleteSession(sessionId);
+          return redirectLogin(request, sessionCookieName);
+        }
+
+        await updateSession(sessionId, reissueBody.accessToken, reissueBody.refreshToken);
+
+        upstreamHeaders.set("authorization", `Bearer ${reissueBody.accessToken}`);
+
+        console.log("[BFF] reissue 성공. 원래 요청 재시도");
+        upstream = await fetch(target, {
+          method: request.method,
+          headers: upstreamHeaders,
+          body,
+        });
+
+        // 재시도도 401이면 세션 정리 후 로그인 리다이렉트
+        if (upstream.status === 401) {
+          console.error("[BFF] 재시도 요청 401 -> 세션 종료 후 로그인 리다이렉트");
+          await deleteSession(sessionId);
+          return redirectLogin(request, sessionCookieName);
+        }
+      }
 
       // 응답 로깅
       console.log(`[BFF] /${apiPath} 응답: ${upstream.status} ${upstream.statusText}`);

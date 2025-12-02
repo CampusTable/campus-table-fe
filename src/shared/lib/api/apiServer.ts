@@ -1,7 +1,7 @@
 import { handleErrorResponse } from "@/shared/lib/errors/errorResponse";
 import { CustomError } from "@/shared/lib/errors/customError";
 import { ErrorCode } from "@/shared/lib/errors/errorCodes";
-import { API_BASE_URL } from "@/shared/lib/types/envUrls";
+import { API_BASE_URL } from "@/shared/utils/env/envConfig";
 
 export class ApiServer {
   private readonly baseUrl: string;
