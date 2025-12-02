@@ -1,9 +1,13 @@
 export const ORIGIN_URL: string = process.env.NEXT_PUBLIC_ORIGIN_URL ?? "";
 export const API_BASE_URL: string = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
-export const REDIS_HOST: string = process.env.NEXT_PUBLIC_REDIS_HOST ?? "";
-export const REDIS_PORT: number = Number(process.env.NEXT_PUBLIC_REDIS_PORT);
-export const REDIS_PASSWORD: string = process.env.NEXT_PUBLIC_REDIS_PASSWORD ?? "";
-export const SESSION_TTL_SECONDS: string = process.env.NEXT_PUBLIC_SESSION_TTL_SECONDS ?? "";
+export const REDIS_HOST: string = process.env.REDIS_HOST ?? "";
+export const REDIS_PORT: number = Number(process.env.REDIS_PORT);
+export const REDIS_PASSWORD: string = process.env.REDIS_PASSWORD ?? "";
+export const SESSION_TTL_SECONDS: number = Number(process.env.SESSION_TTL_SECONDS);
+
+export function isProduction(): boolean {
+  return process.env.NODE_ENV === "production";
+}
 
 if (!ORIGIN_URL) {
   throw new Error("ORIGIN_URL 환경변수가 설정되지 않았습니다.");
