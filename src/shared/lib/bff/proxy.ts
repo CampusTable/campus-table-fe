@@ -56,8 +56,9 @@ function buildUpstreamHeaders(
 /**
  * 세션 삭제 + sid 쿠키 제거 + 로그인페이지 리다이렉트
  */
-function redirectLogin(sessionCookieName: string) {
-  const response: NextResponse = NextResponse.redirect("/login");
+function redirectLogin(request: NextRequest, sessionCookieName: string) {
+  const loginUrl: URL = new URL("/login", request.url);
+  const response: NextResponse = NextResponse.redirect(loginUrl);
   response.cookies.set(sessionCookieName, "", {
     httpOnly: isProduction(),
     secure: isProduction(),
@@ -123,13 +124,13 @@ export function createProxy(config: ProxyConfig): ProxyHandler {
       if (config.useSessionAuth === true && upstream.status === 401 && !isAuthLoginPath && !isAuthReissuePath) {
         const sessionId: string | undefined = request.cookies.get(sessionCookieName)?.value;
         if (!sessionId || sessionId.length === 0) {
-          return redirectLogin(sessionCookieName);
+          return redirectLogin(request, sessionCookieName);
         }
 
         const session = await getSession(sessionId);
         if (!session || session.refreshToken.length === 0) {
           await deleteSession(sessionId);
-          return redirectLogin(sessionCookieName);
+          return redirectLogin(request, sessionCookieName);
         }
 
         // reissue 엔드포인트 호출
@@ -148,7 +149,7 @@ export function createProxy(config: ProxyConfig): ProxyHandler {
         } catch (error) {
           console.error("[BFF] reissue 중 오류 발생:", error);
           await deleteSession(sessionId);
-          return redirectLogin(sessionCookieName);
+          return redirectLogin(request, sessionCookieName);
         }
 
         if (!reissueResponse.ok) {
@@ -160,7 +161,7 @@ export function createProxy(config: ProxyConfig): ProxyHandler {
             // 무시
           }
           await deleteSession(sessionId);
-          return redirectLogin(sessionCookieName);
+          return redirectLogin(request, sessionCookieName);
         }
 
         let reissueBody: ReissueResponse;
@@ -169,7 +170,7 @@ export function createProxy(config: ProxyConfig): ProxyHandler {
         } catch (error) {
           console.error("[BFF] reissue 응답 JSON 파싱 오류:", error);
           await deleteSession(sessionId);
-          return redirectLogin(sessionCookieName);
+          return redirectLogin(request, sessionCookieName);
         }
 
         await updateSession(sessionId, reissueBody.accessToken, reissueBody.refreshToken);
@@ -187,7 +188,7 @@ export function createProxy(config: ProxyConfig): ProxyHandler {
         if (upstream.status === 401) {
           console.error("[BFF] 재시도 요청 401 -> 세션 종료 후 로그인 리다이렉트");
           await deleteSession(sessionId);
-          return redirectLogin(sessionCookieName);
+          return redirectLogin(request, sessionCookieName);
         }
       }
 
