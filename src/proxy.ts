@@ -1,9 +1,9 @@
 // 정적파일 요청 판별
 import { NextRequest, NextResponse } from "next/server";
 import { AUTH_PAGE, AUTH_WHITELIST } from "@/shared/lib/types/authUrls";
+import { SESSION_COOKIE_NAME } from "@/shared/lib/session/sessionStore";
 
 const ACCESS_TOKEN_COOKIE_NAME: string = "accessToken";
-const SESSION_COOKIE_NAME: string = "sid";
 
 function isStaticAsset(pathname: string): boolean {
   const hasExtension: boolean = pathname.includes(".");
