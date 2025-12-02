@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { API_BASE_URL, SESSION_TTL_SECONDS } from "@/shared/lib/types/envUrls";
 import { ErrorCode } from "@/shared/lib/errors/errorCodes";
 import { createSession, SessionData } from "@/shared/lib/session/sessionStore";
 import { LoginRequest, LoginResponse, LoginUpstreamResponse } from "@/features/auth/types/loginTypes";
-import { isProduction } from "@/shared/utils/env/envUtils";
+import { API_BASE_URL, isProduction, SESSION_TTL_SECONDS } from "@/shared/utils/env/envConfig";
 
 const SESSION_COOKIE_NAME = "sid";
 

@@ -4,7 +4,7 @@ import { BodyInit } from "undici-types";
 import { ErrorCode } from "@/shared/lib/errors/errorCodes";
 import { deleteSession, getSession, updateSession } from "@/shared/lib/session/sessionStore";
 import { ReissueRequest, ReissueResponse } from "@/features/auth/types/reissueTypes";
-import { isProduction } from "@/shared/utils/env/envUtils";
+import { isProduction } from "@/shared/utils/env/envConfig";
 
 /**
  * URL 안전 결합 (중복 슬레시 제거)

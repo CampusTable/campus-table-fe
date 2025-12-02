@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
-import { SESSION_TTL_SECONDS } from "@/shared/lib/types/envUrls";
 import { getRedisClient } from "@/shared/lib/redis/redisConfig";
 import Redis from "ioredis";
+import { SESSION_TTL_SECONDS } from "@/shared/utils/env/envConfig";
 
 export interface SessionData {
   studentNumber: string;
@@ -12,7 +12,7 @@ export interface SessionData {
   newUser: boolean;
 }
 
-const TTL: number = Number(SESSION_TTL_SECONDS);
+const TTL: number = SESSION_TTL_SECONDS;
 
 const SESSION_PREFIX: string = "session:";
 

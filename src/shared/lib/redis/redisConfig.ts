@@ -1,5 +1,5 @@
 import Redis from "ioredis";
-import { REDIS_HOST, REDIS_PASSWORD, REDIS_PORT } from "@/shared/lib/types/envUrls";
+import { REDIS_HOST, REDIS_PASSWORD, REDIS_PORT } from "@/shared/utils/env/envConfig";
 
 let redisClient: Redis | null = null;
 
