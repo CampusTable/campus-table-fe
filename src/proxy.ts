@@ -72,7 +72,7 @@ export function proxy(request: NextRequest): NextResponse {
     return NextResponse.redirect(loginUrl);
   }
 
-  // 이미 로그인된 사용자가 AUTH_PAGE 접근 시 -> 루트(/) 라다이렉트
+  // 이미 로그인된 사용자가 AUTH_PAGE 접근 시 -> 루트(/) 리다이렉트
   if (authenticated && isAuthPagePath) {
     const rootUrl: URL = new URL("/", request.url);
     return NextResponse.redirect(rootUrl);
