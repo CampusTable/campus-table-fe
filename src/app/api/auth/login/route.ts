@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ErrorCode } from "@/shared/lib/errors/errorCodes";
-import { createSession, SessionData } from "@/shared/lib/session/sessionStore";
+import { createSession, SESSION_COOKIE_NAME, SessionData } from "@/shared/lib/session/sessionStore";
 import { LoginRequest, LoginResponse, LoginUpstreamResponse } from "@/features/auth/types/loginTypes";
 import { API_BASE_URL, isProduction, SESSION_TTL_SECONDS } from "@/shared/utils/env/envConfig";
-
-const SESSION_COOKIE_NAME = "sid";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
