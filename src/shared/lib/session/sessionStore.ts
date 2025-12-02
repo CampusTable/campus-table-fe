@@ -18,6 +18,8 @@ const SESSION_PREFIX: string = "session:";
 
 const redisClient: Redis = getRedisClient();
 
+export const SESSION_COOKIE_NAME: string = "sid";
+
 /**
  * Redis에 SessionData 저장
  */

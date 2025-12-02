@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { ProxyConfig, ProxyContext, ProxyHandler } from "@/shared/lib/bff/proxyTypes";
 import { BodyInit } from "undici-types";
 import { ErrorCode } from "@/shared/lib/errors/errorCodes";
-import { deleteSession, getSession, updateSession } from "@/shared/lib/session/sessionStore";
+import { deleteSession, getSession, SESSION_COOKIE_NAME, updateSession } from "@/shared/lib/session/sessionStore";
 import { ReissueRequest, ReissueResponse } from "@/features/auth/types/reissueTypes";
 import { isProduction } from "@/shared/utils/env/envConfig";
 
@@ -91,7 +91,7 @@ export function createProxy(config: ProxyConfig): ProxyHandler {
 
       const upstreamHeaders: Headers = buildUpstreamHeaders(request, backendHost, config);
 
-      const sessionCookieName: string = config.sessionCookieName ?? "sid";
+      const sessionCookieName: string = config.sessionCookieName ?? SESSION_COOKIE_NAME;
 
       // 세션 기반 인증 처리 (sid -> Redis 세션 -> accessToken -> Authorization)
       if (config.useSessionAuth === true) {

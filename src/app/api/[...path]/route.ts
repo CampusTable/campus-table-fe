@@ -2,13 +2,14 @@ import { createProxy } from "@/shared/lib/bff/proxy";
 import { NextRequest } from "next/server";
 import { ProxyContext } from "@/shared/lib/bff/proxyTypes";
 import { API_BASE_URL } from "@/shared/utils/env/envConfig";
+import { SESSION_COOKIE_NAME } from "@/shared/lib/session/sessionStore";
 
 const proxy = createProxy({
   backendBaseUrl: API_BASE_URL,
   // promoteCookieToAuth: { cookieName: 'accessToken', overwriteIfExists: false },
   excludedRequestHeaders: ['content-length'],
   useSessionAuth: true,
-  sessionCookieName: "sid",
+  sessionCookieName: SESSION_COOKIE_NAME,
 });
 
 export async function GET(req: NextRequest, ctx: ProxyContext): Promise<Response> {
