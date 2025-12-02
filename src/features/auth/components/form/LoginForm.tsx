@@ -7,10 +7,11 @@ import styles from "./LoginForm.module.css";
 import LoginButton from "@/features/auth/components/button/LoginButton";
 import { isDisabled, isValidSubmit } from "@/features/auth/utils/form/loginFormUtils";
 import LoginFormErrorLabel from "@/features/auth/components/label/LoginFormErrorLabel";
-import { login, LoginRequest } from "@/features/auth/api/loginApi";
 import { useRouter } from "next/navigation";
 import { CustomError } from "@/shared/lib/errors/customError";
 import { ERROR_MESSAGE } from "@/shared/lib/errors/errorCodes";
+import { LoginRequest } from "@/features/auth/types/loginTypes";
+import { login } from "@/features/auth/api/loginApi";
 
 export default function LoginForm() {
   const router = useRouter();

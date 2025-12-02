@@ -1,14 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { LoginRequest } from "@/features/auth/api/loginApi";
-import { API_BASE_URL } from "@/shared/lib/types/envUrls";
 import { ErrorCode } from "@/shared/lib/errors/errorCodes";
+import { createSession, SessionData } from "@/shared/lib/session/sessionStore";
+import { LoginRequest, LoginResponse, LoginUpstreamResponse } from "@/features/auth/types/loginTypes";
+import { API_BASE_URL, isProduction, SESSION_TTL_SECONDS } from "@/shared/utils/env/envConfig";
 
-interface LoginApiResponse {
-  studentNumber: string;
-  studentName: string;
-  newUser: boolean;
-  accessToken: string;
-}
+const SESSION_COOKIE_NAME = "sid";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
@@ -26,17 +22,36 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       return NextResponse.json(await upstream.json(), { status: upstream.status });
     }
 
-    const responseBody: LoginApiResponse = (await upstream.json()) as LoginApiResponse;
+    const upstreamBody: LoginUpstreamResponse = (await upstream.json()) as LoginUpstreamResponse;
+
+    const sessionData: SessionData = {
+      studentNumber: upstreamBody.studentNumber,
+      studentName: upstreamBody.studentName,
+      accessToken: upstreamBody.accessToken,
+      refreshToken: upstreamBody.refreshToken,
+      maxAgeSeconds: upstreamBody.maxAgeSeconds,
+      newUser: upstreamBody.newUser,
+    };
+
+    // 세션 생성 및 세션 ID 발급
+    const sessionId: string = await createSession(sessionData);
+
+    // 브라우저로 내려줄 응답
+    const responseBody: LoginResponse = {
+      studentNumber: upstreamBody.studentNumber,
+      studentName: upstreamBody.studentName,
+      newUser: upstreamBody.newUser,
+    };
 
     const response: NextResponse = NextResponse.json(responseBody, { status: upstream.status });
 
-    // 엑세스 토큰 쿠키 저장
-    response.cookies.set("accessToken", responseBody.accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // production 환경에서만 'secure = true'
-      sameSite: "lax",
+    response.cookies.set(SESSION_COOKIE_NAME, sessionId, {
+      httpOnly: isProduction(),
+      secure: isProduction(),
+      sameSite: "strict",
       path: "/",
-      maxAge: 60 * 60, // 1시간
+      domain: isProduction() ? "campustable.shop" : "",
+      maxAge: sessionData.maxAgeSeconds ?? SESSION_TTL_SECONDS,
     });
 
     return response;
