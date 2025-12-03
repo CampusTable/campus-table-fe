@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ERROR_MESSAGE, ErrorCode } from "@/shared/lib/errors/errorCodes";
 import { createSession, SESSION_COOKIE_NAME, SessionData } from "@/shared/lib/session/sessionStore";
 import { LoginRequest, LoginResponse, LoginUpstreamResponse } from "@/features/auth/types/loginTypes";
 import { API_BASE_URL, isProduction, SESSION_TTL_SECONDS } from "@/shared/utils/env/envConfig";
-import { handleErrorResponse } from "@/shared/lib/errors/errorResponse";
-import { CustomError } from "@/shared/lib/errors/customError";
+import { createErrorNextResponse, handleErrorResponse } from "@/shared/lib/errors/errorResponse";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
@@ -56,24 +54,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     return response;
   } catch (error) {
-    console.error("[LoginRoute] 로그인 BFF 처리 중 오류:", error);
-
-    if (error instanceof CustomError) {
-      return NextResponse.json(
-        {
-          errorCode: error.errorCode,
-          errorMessage: error.errorMessage,
-        },
-        { status: error.httpStatus },
-      );
-    }
-
-    return NextResponse.json(
-      {
-        errorCode: ErrorCode.UNKNOWN_ERROR,
-        errorMessage: ERROR_MESSAGE[ErrorCode.UNKNOWN_ERROR],
-      },
-      { status: 500 },
-    );
+    return createErrorNextResponse(error);
   }
 }
