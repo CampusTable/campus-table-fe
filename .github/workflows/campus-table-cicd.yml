@@ -24,12 +24,12 @@ jobs:
       # 브랜치별 .env.production 생성
       - name: Create .env.production file
         run: |
-          if [ "${{ github.ref_name }}" == "main" ]; then
-            printf '%s' "${{ secrets.ENV_MAIN }}" > .env.production
-          elif [ "${{ github.ref_name }}" == "test" ]; then
-            printf '%s' "${{ secrets.ENV_MAIN }}" > .env.production
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            printf '%s\n' "${{ secrets.ENV_MAIN }}" > .env.production
+          elif [ "${{ github.ref_name }}" = "test" ]; then
+            printf '%s\n' "${{ secrets.ENV_TEST }}" > .env.production
           else
-            printf '%s' "${{ secrets.ENV_MAIN }}" > .env.production
+            printf '%s\n' "${{ secrets.ENV_MAIN }}" > .env.production
           fi
 
       - name: Set up Node.js
@@ -114,9 +114,9 @@ jobs:
             CONTAINER_NAME=${APP_BASE}-web
             IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/${APP_BASE}-web:${BRANCH}
             
-            if [ "$BRANCH" == "main" ]; then
+            if [ "$BRANCH" = "main" ]; then
               PORT=3003
-            elif [ "$BRANCH" == "test" ]; then
+            elif [ "$BRANCH" = "test" ]; then
               CONTAINER_NAME="${APP_BASE}-web-test"
               PORT=3004
             fi
@@ -135,6 +135,15 @@ jobs:
               echo "컨테이너 $CONTAINER_NAME 이(가) 삭제되었습니다."
             else
               echo "존재하는 컨테이너 $CONTAINER_NAME 이(가) 없습니다."
+            fi
+            
+            echo "브랜치별 .env.production 생성..."
+            if [ "$BRANCH" = "main" ]; then
+              echo "${{ secrets.ENV_MAIN }}" > .env.production
+            elif [ "$BRANCH" = "test" ]; then
+              echo "${{ secrets.ENV_TEST }}" > .env.production
+            else
+              echo "${{ secrets.ENV_MAIN }}" > .env.production
             fi
 
             echo "새로운 컨테이너 $CONTAINER_NAME 실행 중..."
