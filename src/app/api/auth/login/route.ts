@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ErrorCode } from "@/shared/lib/errors/errorCodes";
 import { createSession, SESSION_COOKIE_NAME, SessionData } from "@/shared/lib/session/sessionStore";
 import { LoginRequest, LoginResponse, LoginUpstreamResponse } from "@/features/auth/types/loginTypes";
 import { API_BASE_URL, isProduction, SESSION_TTL_SECONDS } from "@/shared/utils/env/envConfig";
+import { createErrorNextResponse, handleErrorResponse } from "@/shared/lib/errors/errorResponse";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const loginRequest: LoginRequest = await request.json();
 
-    const upstream = await fetch(`${API_BASE_URL}/api/auth/login`, {
+    const upstream: Response = await fetch(`${API_BASE_URL}/api/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -17,7 +17,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     });
 
     if (!upstream.ok) {
-      return NextResponse.json(await upstream.json(), { status: upstream.status });
+      await handleErrorResponse(upstream);
     }
 
     const upstreamBody: LoginUpstreamResponse = (await upstream.json()) as LoginUpstreamResponse;
@@ -54,14 +54,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     return response;
   } catch (error) {
-    console.error("[LoginRoute] 로그인 BFF 처리 중 오류:", error);
-
-    return NextResponse.json(
-      {
-        errorCode: ErrorCode.INTERNAL_SERVER_ERROR,
-        errorMessage: "로그인 처리 중 서버 오류가 발생했습니다.",
-      },
-      { status: 500 },
-    );
+    return createErrorNextResponse(error);
   }
 }
