@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ProxyConfig, ProxyContext, ProxyHandler } from "@/shared/lib/bff/proxyTypes";
 import { BodyInit } from "undici-types";
-import { ErrorCode } from "@/shared/lib/errors/errorCodes";
 import { deleteSession, getSession, SESSION_COOKIE_NAME, updateSession } from "@/shared/lib/session/sessionStore";
 import { ReissueRequest, ReissueResponse } from "@/features/auth/types/reissueTypes";
 import { isProduction } from "@/shared/utils/env/envConfig";
+import { createErrorNextResponse, handleErrorResponse } from "@/shared/lib/errors/errorResponse";
 
 /**
  * URL 안전 결합 (중복 슬레시 제거)
@@ -198,13 +198,7 @@ export function createProxy(config: ProxyConfig): ProxyHandler {
       // 에러 응답 처리
       if (!upstream.ok) {
         console.error(`[BFF] /${apiPath} API 오류: ${upstream.status}`);
-
-        try {
-          const errorData = await upstream.clone().json();
-          console.error(`[BFF] /${apiPath} 에러 내용:`, errorData);
-        } catch {
-          // JSON 파싱 실패 시 무시
-        }
+        await handleErrorResponse(upstream);
       }
 
       // 응답을 그대로 브릿지(Set-Cookie 포함)
@@ -223,16 +217,7 @@ export function createProxy(config: ProxyConfig): ProxyHandler {
 
       return response;
     } catch (error) {
-      console.error(`[BFF] 프록시 처리 중 오류:`, error);
-
-      // 네트워크 오류 등의 경우 500 에러
-      return NextResponse.json(
-        {
-          errorCode: ErrorCode.NETWORK_ERROR,
-          errorMessage: "Backend API 호출 중 오류가 발생했습니다."
-        },
-        { status: 500 }
-      );
+      return createErrorNextResponse(error);
     }
   };
 }
