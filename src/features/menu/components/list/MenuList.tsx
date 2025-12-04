@@ -1,8 +1,8 @@
 import styles from "./MenuList.module.css";
-import MenuCard from "@/features/menu/card/MenuCard";
-import SeparationBar from "@/features/menu/bar/SeparationBar";
+import MenuCard from "@/features/menu/components/card/MenuCard";
+import SeparationBar from "@/features/menu/components/bar/SeparationBar";
 import React from "react";
-import { MenuListItem } from "@/features/menu/list/types/menuListType";
+import { MenuListItem } from "@/features/menu/types/menuListType";
 
 interface MenuListProps {
   items: MenuListItem[];

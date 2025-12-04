@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import styles from "./CategoryBar.module.css";
-import CategoryButton from "@/features/menu/category/button/CategoryButton";
+import CategoryButton from "@/features/menu/components/category/button/CategoryButton";
 
 interface CategoryItem {
   id: string;

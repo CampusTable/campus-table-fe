@@ -1,10 +1,10 @@
 "use client";
 
 import AdBannerCarousel from "@/features/banner/components/AdBannerCarousel";
-import OrderSummaryBar from "@/features/menu/bar/OrderSummaryBar";
-import CategoryBar from "@/features/menu/category/CategoryBar";
-import MenuList from "@/features/menu/list/components/MenuList";
-import { MenuListItem } from "@/features/menu/list/types/menuListType";
+import OrderSummaryBar from "@/features/menu/components/bar/OrderSummaryBar";
+import CategoryBar from "@/features/menu/components/category/CategoryBar";
+import MenuList from "@/features/menu/components/list/MenuList";
+import { MenuListItem } from "@/features/menu/types/menuListType";
 import styles from "./page.module.css";
 
 const CATEGORIES = [

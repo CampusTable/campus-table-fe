@@ -4,8 +4,8 @@ import styles from "./MenuCard.module.css";
 import Image from "next/image";
 import { formatNumberWithComma } from "@/shared/utils/number/utils";
 import { AddMenuButton } from "@/assets/icons";
-import SoldOutTag from "@/features/menu/tags/components/SoldOutTag";
-import PopularTag from "@/features/menu/tags/components/PopularTag";
+import SoldOutTag from "@/features/menu/components/tags/SoldOutTag";
+import PopularTag from "@/features/menu/components/tags/PopularTag";
 
 type Rank = 1 | 2 | 3;
 
