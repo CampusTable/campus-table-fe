@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ProxyConfig, ProxyContext, ProxyHandler } from "@/shared/lib/bff/proxyTypes";
 import { BodyInit } from "undici-types";
 import { deleteSession, getSession, SESSION_COOKIE_NAME, updateSession } from "@/shared/lib/session/sessionStore";
 import { ReissueRequest, ReissueResponse } from "@/features/auth/types/reissueTypes";
 import { isProduction } from "@/shared/utils/env/envConfig";
 import { createErrorNextResponse, handleErrorResponse } from "@/shared/lib/errors/errorResponse";
+import { GatewayConfig, GatewayContext, GatewayHandler } from "@/shared/lib/bff/gatewayTypes";
 
 /**
  * URL 안전 결합 (중복 슬레시 제거)
@@ -21,7 +21,7 @@ function joinUrl(base: string, path: string, search: string): string {
 function buildUpstreamHeaders(
   request: NextRequest,
   backendHost: string,
-  config: ProxyConfig,
+  config: GatewayConfig,
 ): Headers {
   const headers = new Headers(request.headers);
   headers.set("host", backendHost);
@@ -64,7 +64,7 @@ function redirectLogin(request: NextRequest, sessionCookieName: string) {
     secure: isProduction(),
     sameSite: "strict",
     path: "/",
-    domain: isProduction() ? "campustable.shop" : "",
+    domain: isProduction() ? "campustable.shop" : undefined,
     maxAge: 0
   });
 
@@ -72,15 +72,15 @@ function redirectLogin(request: NextRequest, sessionCookieName: string) {
 }
 
 /**
- * 중앙 프록시 팩토리
+ * 중앙 Gateway 팩토리
  */
-export function createProxy(config: ProxyConfig): ProxyHandler {
+export function createGateway(config: GatewayConfig): GatewayHandler {
   const backendUrl: URL = new URL(config.backendBaseUrl);
   const backendHost: string = backendUrl.host;
 
-  return async (request: NextRequest, context: ProxyContext): Promise<Response> => {
+  return async (request: NextRequest, context: GatewayContext): Promise<Response> => {
     try {
-      const { path: segments } = await context.params;
+      const { path: segments } = context.params;
       const path: string = Array.isArray(segments) ? segments.join("/") : "";
       const apiPath: string = path.startsWith("api/") ? path : `api/${path}`;
       const requestUrl: URL = new URL(request.url);

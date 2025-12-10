@@ -1,10 +1,10 @@
 import { NextRequest } from "next/server";
 
-export interface ProxyContext {
-  readonly params: Promise<{ path: string[] }>;
+export interface GatewayContext {
+  readonly params: { path: string[] };
 }
 
-export interface ProxyConfig {
+export interface GatewayConfig {
   readonly backendBaseUrl: string;
   // (선택) 쿠키를 Authorization: Bearer로 승격하고 싶을 때
   readonly promoteCookieToAuth?: {
@@ -19,4 +19,4 @@ export interface ProxyConfig {
   readonly sessionCookieName?: string;
 }
 
-export type ProxyHandler = (request: NextRequest, context: ProxyContext) => Promise<Response>;
+export type GatewayHandler = (request: NextRequest, context: GatewayContext) => Promise<Response>;
