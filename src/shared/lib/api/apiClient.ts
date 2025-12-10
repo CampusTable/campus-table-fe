@@ -1,6 +1,7 @@
 import { handleErrorResponse } from "@/shared/lib/errors/errorResponse";
 import { CustomError } from "@/shared/lib/errors/customError";
 import { ErrorCode } from "@/shared/lib/errors/errorCodes";
+import { parseJsonResponse } from "@/shared/utils/api/apiUtils";
 
 export class ApiClient {
   async request<T>(
@@ -20,19 +21,7 @@ export class ApiClient {
         await handleErrorResponse(response);
       }
 
-      if (response.status === 204 || response.status === 205 || response.status === 304) {
-        return undefined as T;
-      }
-
-      if (response.headers.get("content-length") === "0") {
-        return undefined as T;
-      }
-
-      if (!response.headers.get("content-type")?.includes("application/json")) {
-        return undefined as T;
-      }
-
-      return await response.json();
+      return await parseJsonResponse<T>(response);
     } catch (error) {
       if (error instanceof CustomError) {
         throw error;
