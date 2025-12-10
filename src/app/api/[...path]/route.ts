@@ -1,10 +1,10 @@
-import { createProxy } from "@/shared/lib/bff/proxy";
 import { NextRequest } from "next/server";
-import { ProxyContext } from "@/shared/lib/bff/proxyTypes";
 import { API_BASE_URL } from "@/shared/utils/env/envConfig";
 import { SESSION_COOKIE_NAME } from "@/shared/lib/session/sessionStore";
+import { createGateway } from "@/shared/lib/bff/gateway";
+import { GatewayContext } from "@/shared/lib/bff/gatewayTypes";
 
-const proxy = createProxy({
+const gateway = createGateway({
   backendBaseUrl: API_BASE_URL,
   // promoteCookieToAuth: { cookieName: 'accessToken', overwriteIfExists: false },
   excludedRequestHeaders: ['content-length'],
@@ -12,26 +12,26 @@ const proxy = createProxy({
   sessionCookieName: SESSION_COOKIE_NAME,
 });
 
-export async function GET(req: NextRequest, ctx: ProxyContext): Promise<Response> {
-  return proxy(req, ctx);
+export async function GET(req: NextRequest, ctx: GatewayContext): Promise<Response> {
+  return gateway(req, ctx);
 }
 
-export async function POST(req: NextRequest, ctx: ProxyContext): Promise<Response> {
-  return proxy(req, ctx);
+export async function POST(req: NextRequest, ctx: GatewayContext): Promise<Response> {
+  return gateway(req, ctx);
 }
 
-export async function PUT(req: NextRequest, ctx: ProxyContext): Promise<Response> {
-  return proxy(req, ctx);
+export async function PUT(req: NextRequest, ctx: GatewayContext): Promise<Response> {
+  return gateway(req, ctx);
 }
 
-export async function PATCH(req: NextRequest, ctx: ProxyContext): Promise<Response> {
-  return proxy(req, ctx);
+export async function PATCH(req: NextRequest, ctx: GatewayContext): Promise<Response> {
+  return gateway(req, ctx);
 }
 
-export async function DELETE(req: NextRequest, ctx: ProxyContext): Promise<Response> {
-  return proxy(req, ctx);
+export async function DELETE(req: NextRequest, ctx: GatewayContext): Promise<Response> {
+  return gateway(req, ctx);
 }
 
-export async function OPTIONS(req: NextRequest, ctx: ProxyContext): Promise<Response> {
-  return proxy(req, ctx);
+export async function OPTIONS(req: NextRequest, ctx: GatewayContext): Promise<Response> {
+  return gateway(req, ctx);
 }
