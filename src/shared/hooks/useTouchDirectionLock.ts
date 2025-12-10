@@ -73,7 +73,10 @@ export function useTouchDirectionLock({
       return;
     }
 
-    event.preventDefault();
+    if (event.cancelable) {
+      event.preventDefault();
+    }
+
     lastDeltaXRef.current = deltaX;
 
     if (onHorizontalMove) {
