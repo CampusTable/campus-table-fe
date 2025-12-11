@@ -160,3 +160,64 @@ export async function fetchServer<T>(
   await handleErrorResponse(response);
   throw new CustomError(ErrorCode.UNKNOWN_ERROR, response.status);
 }
+
+export async function getFetchServer<T>(
+  request: NextRequest,
+  endpoint: string,
+  options?: RequestOptions,
+): Promise<T> {
+  return fetchServer<T>(request, endpoint, {
+    ...(options ?? {}),
+    method: "GET",
+  });
+}
+
+export async function postFetchServer<T>(
+  request: NextRequest,
+  endpoint: string,
+  data?: unknown,
+  options?: RequestOptions,
+): Promise<T> {
+  return fetchServer<T>(request, endpoint, {
+    ...(options ?? {}),
+    method: "POST",
+    body: data ? JSON.stringify(data) : undefined,
+  });
+}
+
+export async function putServer<T>(
+  request: NextRequest,
+  endpoint: string,
+  data?: unknown,
+  options?: RequestOptions,
+): Promise<T> {
+  return fetchServer<T>(request, endpoint, {
+    ...(options ?? {}),
+    method: "PUT",
+    body: data ? JSON.stringify(data) : undefined,
+  });
+}
+
+export async function patchServer<T>(
+  request: NextRequest,
+  endpoint: string,
+  data?: unknown,
+  options?: RequestOptions,
+): Promise<T> {
+  return fetchServer<T>(request, endpoint, {
+    ...(options ?? {}),
+    method: "PATCH",
+    body: data ? JSON.stringify(data) : undefined,
+  });
+}
+
+export async function deleteServer<T>(
+  request: NextRequest,
+  endpoint: string,
+  options?: RequestOptions,
+): Promise<T> {
+  return fetchServer<T>(request, endpoint, {
+    ...(options ?? {}),
+    method: "DELETE",
+  });
+}
