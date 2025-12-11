@@ -28,7 +28,7 @@ export async function handleErrorResponse(response: Response): Promise<never> {
 
   // 명시된 ErrorCode 인 경우
   if (rawErrorCode && isValidErrorCode(rawErrorCode)) {
-    throw new CustomError(rawErrorCode, response.status, errorResponse.errorMessage);
+    throw new CustomError(rawErrorCode, response.status);
   }
 
   // 명시되지 않은 ErrorCode 인 경우
