@@ -1,19 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { BodyInit } from "undici-types";
-import { deleteSession, getSession, SESSION_COOKIE_NAME, updateSession } from "@/shared/lib/session/sessionStore";
-import { ReissueRequest, ReissueResponse } from "@/features/auth/types/reissueTypes";
-import { isProduction } from "@/shared/utils/env/envConfig";
 import { createErrorNextResponse, handleErrorResponse } from "@/shared/lib/errors/errorResponse";
 import { GatewayConfig, GatewayContext, GatewayHandler } from "@/shared/lib/bff/gatewayTypes";
-
-/**
- * URL 안전 결합 (중복 슬레시 제거)
- */
-function joinUrl(base: string, path: string, search: string): string {
-  const trimmedBase: string = base.replace(/\/+$/, '');
-  const trimmedPath: string = path.replace(/^\/+/, '');
-  return `${trimmedBase}/${trimmedPath}${search}`;
-}
+import { buildApiUrlWithQueryString } from "@/shared/utils/api/apiUtils";
+import { nvl } from "@/shared/utils/string/nvl";
+import {
+  applyAuthHeaders,
+  AuthContextResult,
+  createCookieReaderFromRequest,
+  reissueAndUpdateSession,
+  resolveAuthFromCookies
+} from "@/shared/lib/auth/authHandler";
 
 /**
  * 요청 헤더 복제 + 정리
@@ -30,6 +27,7 @@ function buildUpstreamHeaders(
   const excluded = new Set((config.excludedRequestHeaders ?? [])
     .map((header) => header.toLowerCase())
   );
+
   for (const [header] of headers) {
     if (excluded.has(header.toLowerCase())) {
       headers.delete(header);
@@ -41,8 +39,8 @@ function buildUpstreamHeaders(
     const already: boolean = headers.has("authorization");
     const overwrite: boolean = config.promoteCookieToAuth.overwriteIfExists === true;
     if (!already || overwrite) {
-      const token: string | undefined = request.cookies.get(config.promoteCookieToAuth.cookieName)?.value;
-      if (token && token.length > 0) {
+      const token: string = nvl(request.cookies.get(config.promoteCookieToAuth.cookieName)?.value);
+      if (token) {
         headers.set("authorization", `Bearer ${token}`);
       }
     }
@@ -54,25 +52,8 @@ function buildUpstreamHeaders(
 }
 
 /**
- * 세션 삭제 + sid 쿠키 제거 + 로그인페이지 리다이렉트
- */
-function redirectLogin(request: NextRequest, sessionCookieName: string) {
-  const loginUrl: URL = new URL("/login", request.url);
-  const response: NextResponse = NextResponse.redirect(loginUrl);
-  response.cookies.set(sessionCookieName, "", {
-    httpOnly: isProduction(),
-    secure: isProduction(),
-    sameSite: "strict",
-    path: "/",
-    domain: isProduction() ? "campustable.shop" : undefined,
-    maxAge: 0
-  });
-
-  return response;
-}
-
-/**
  * 중앙 Gateway 팩토리
+ * - /api/[...path] 에서 사용
  */
 export function createGateway(config: GatewayConfig): GatewayHandler {
   const backendUrl: URL = new URL(config.backendBaseUrl);
@@ -80,30 +61,26 @@ export function createGateway(config: GatewayConfig): GatewayHandler {
 
   return async (request: NextRequest, context: GatewayContext): Promise<Response> => {
     try {
-      const { path: segments } = context.params;
+      const { path: segments } = await context.params;
       const path: string = Array.isArray(segments) ? segments.join("/") : "";
       const apiPath: string = path.startsWith("api/") ? path : `api/${path}`;
       const requestUrl: URL = new URL(request.url);
-      const target: string = joinUrl(config.backendBaseUrl, apiPath, requestUrl.search);
+      const target: string = buildApiUrlWithQueryString(config.backendBaseUrl, apiPath, requestUrl.search);
 
       // 요청 로깅
-      console.log(`[BFF] ${request.method} /${apiPath} -> ${target}`);
+      console.log(`[BFF Gateway] ${request.method} /${apiPath} -> ${target}`);
 
       const upstreamHeaders: Headers = buildUpstreamHeaders(request, backendHost, config);
 
-      const sessionCookieName: string = config.sessionCookieName ?? SESSION_COOKIE_NAME;
+      const authType = config.authType ?? "session";
+      const requireAuth: boolean = config.requireAuth !== false && authType !== "none";
 
-      // 세션 기반 인증 처리 (sid -> Redis 세션 -> accessToken -> Authorization)
-      if (config.useSessionAuth === true) {
-        const sessionId: string | undefined = request.cookies.get(sessionCookieName)?.value;
+      let authContext: AuthContextResult = {};
 
-        if (sessionId && sessionId.length > 0) {
-          const session = await getSession(sessionId);
-
-          if (session && session.accessToken.length > 0) {
-            upstreamHeaders.set("authorization", `Bearer ${session.accessToken}`);
-          }
-        }
+      if (requireAuth) {
+        const cookieReader = createCookieReaderFromRequest(request);
+        authContext = await resolveAuthFromCookies(cookieReader, config);
+        applyAuthHeaders(upstreamHeaders, authContext);
       }
 
       // body 처리
@@ -121,83 +98,24 @@ export function createGateway(config: GatewayConfig): GatewayHandler {
       const isAuthReissuePath: boolean = apiPath === "api/auth/reissue";
       const isAuthLoginPath: boolean = apiPath === "api/auth/login";
 
-      if (config.useSessionAuth === true && upstream.status === 401 && !isAuthLoginPath && !isAuthReissuePath) {
-        const sessionId: string | undefined = request.cookies.get(sessionCookieName)?.value;
-        if (!sessionId || sessionId.length === 0) {
-          return redirectLogin(request, sessionCookieName);
-        }
+      // [session 전략] 401 -> reissue -> 재시도 (login / reissue 엔드포인트 제외)
+      if (requireAuth && authType === "session" && upstream.status === 401 && !isAuthLoginPath && !isAuthReissuePath && authContext.sessionId && authContext.refreshToken && (config.enableReissue ?? true)) {
+        const updatedContext: AuthContextResult = await reissueAndUpdateSession(authContext.sessionId, authContext.refreshToken);
+        applyAuthHeaders(upstreamHeaders, updatedContext);
 
-        const session = await getSession(sessionId);
-        if (!session || session.refreshToken.length === 0) {
-          await deleteSession(sessionId);
-          return redirectLogin(request, sessionCookieName);
-        }
-
-        // reissue 엔드포인트 호출
-        const reissueUrl: string = joinUrl(config.backendBaseUrl, "api/auth/reissue", "");
-        console.log("[BFF] reissue 시도: ", reissueUrl);
-        let reissueResponse: Response;
-        const reissueRequest: ReissueRequest = { refreshToken: session.refreshToken };
-        try {
-          reissueResponse = await fetch(reissueUrl, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(reissueRequest),
-          });
-        } catch (error) {
-          console.error("[BFF] reissue 중 오류 발생:", error);
-          await deleteSession(sessionId);
-          return redirectLogin(request, sessionCookieName);
-        }
-
-        if (!reissueResponse.ok) {
-          console.error("[BFF] reissue 실패, status:", reissueResponse.status);
-          try {
-            const errorBody = await reissueResponse.clone().json();
-            console.error("[BFF] reissue 실패 응답:", errorBody);
-          } catch {
-            // 무시
-          }
-          await deleteSession(sessionId);
-          return redirectLogin(request, sessionCookieName);
-        }
-
-        let reissueBody: ReissueResponse;
-        try {
-          reissueBody = (await reissueResponse.json()) as ReissueResponse;
-        } catch (error) {
-          console.error("[BFF] reissue 응답 JSON 파싱 오류:", error);
-          await deleteSession(sessionId);
-          return redirectLogin(request, sessionCookieName);
-        }
-
-        await updateSession(sessionId, reissueBody.accessToken, reissueBody.refreshToken);
-
-        upstreamHeaders.set("authorization", `Bearer ${reissueBody.accessToken}`);
-
-        console.log("[BFF] reissue 성공. 원래 요청 재시도");
         upstream = await fetch(target, {
           method: request.method,
           headers: upstreamHeaders,
           body,
         });
-
-        // 재시도도 401이면 세션 정리 후 로그인 리다이렉트
-        if (upstream.status === 401) {
-          console.error("[BFF] 재시도 요청 401 -> 세션 종료 후 로그인 리다이렉트");
-          await deleteSession(sessionId);
-          return redirectLogin(request, sessionCookieName);
-        }
       }
 
       // 응답 로깅
-      console.log(`[BFF] /${apiPath} 응답: ${upstream.status} ${upstream.statusText}`);
+      console.log(`[BFF Gateway] /${apiPath} 응답: ${upstream.status} ${upstream.statusText}`);
 
       // 에러 응답 처리
       if (!upstream.ok) {
-        console.error(`[BFF] /${apiPath} API 오류: ${upstream.status}`);
+        console.error(`[BFF Gateway] /${apiPath} API 오류: ${upstream.status}`);
         await handleErrorResponse(upstream);
       }
 

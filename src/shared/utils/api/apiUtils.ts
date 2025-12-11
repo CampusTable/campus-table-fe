@@ -1,21 +1,35 @@
+import { API_BASE_URL } from "@/shared/utils/env/envConfig";
+
+/**
+ * 공통 JSON 파서
+ */
 export async function parseJsonResponse<T>(response: Response): Promise<T> {
-  const status: number = response.status;
-  const contentLength: string | null = response.headers.get("content-length");
-  const contentType: string | null = response.headers.get("content-type");
-
-  // 204/205/206: 바디 없음
-  if (status === 204 || status === 205 || status === 304) {
+  try {
+    return (await response.json()) as T;
+  } catch {
+    // body 가 없거나 JSON 파싱 실패
     return undefined as T;
   }
+}
 
-  if (contentLength === "0") {
-    return undefined as T;
+/**
+ * 백엔드 API URL 생성
+ */
+export function buildApiUrl(endpoint: string, baseUrl?: string): string {
+  if (endpoint.startsWith("http://") || endpoint.startsWith("https://")) {
+    return endpoint;
   }
 
-  if (!contentType || !contentType.includes("application/json")) {
-    return undefined as T;
-  }
+  const targetBase: string = (baseUrl ?? API_BASE_URL).replace(/\/+$/, "");
+  const trimmedEndpoint: string = endpoint.replace(/^\/+/, "");
 
-  const data: unknown = response.json();
-  return data as T;
+  return `${targetBase}/${trimmedEndpoint}`;
+}
+
+/**
+ * 쿼리스트링 포함 URL 생성
+ */
+export function buildApiUrlWithQueryString(baseUrl: string, endpoint: string, search: string): string {
+  const url: string = buildApiUrl(endpoint, baseUrl);
+  return `${url}${search}`;
 }

@@ -1,49 +1,37 @@
+"use server";
+
 import { NextRequest } from "next/server";
-import { deleteSession, getSession, SESSION_COOKIE_NAME, updateSession } from "@/shared/lib/session/sessionStore";
 import { CustomError } from "@/shared/lib/errors/customError";
 import { ErrorCode } from "@/shared/lib/errors/errorCodes";
-import { parseJsonResponse } from "@/shared/utils/api/apiUtils";
-import { ReissueRequest, ReissueResponse } from "@/features/auth/types/reissueTypes";
+import { buildApiUrl, parseJsonResponse } from "@/shared/utils/api/apiUtils";
 import { handleErrorResponse } from "@/shared/lib/errors/errorResponse";
-import { API_BASE_URL } from "@/shared/utils/env/envConfig";
+import {
+  applyAuthHeaders,
+  AuthContextResult,
+  CommonAuthOptions,
+  createCookieReaderFromRequest,
+  reissueAndUpdateSession,
+  resolveAuthFromCookies
+} from "@/shared/lib/auth/authHandler";
+import { deleteSession } from "@/shared/lib/session/sessionStore";
 
-export interface RequestOptions extends RequestInit {
-  /**
-   * 인증이 꼭 필요한 요청 여부
-   * - false: sid / reissue 없이 호출
-   */
-  requireAuth?: boolean;
-
-  /**
-   * 세션 쿠키 이름
-   */
-  sessionCookieName?: string;
-}
-
-function buildUrl(endpoint: string): string {
-  // 이미 절대 경로 URL이면 그대로 사용
-  if (endpoint.startsWith("http://") || endpoint.startsWith("https://")) {
-    return endpoint;
-  }
-
-  const trimmedBase: string = API_BASE_URL.replace(/\/+$/, "");
-  const trimmedEndpoint: string = endpoint.replace(/^\/+/, "");
-  return `${trimmedBase}/${trimmedEndpoint}`;
+export interface BffRequestOptions extends RequestInit, CommonAuthOptions {
 }
 
 /**
- * BFF -> 백엔드 API 호출 공통 헬퍼
- * - 세션(sid) 기반 accessToken 주입
- * - 401 시 refreshToken으로 reissue 후 재시도
+ * BFF(app/api/*) 라우트 -> 백엔드 API 호출 공통 헬퍼
+ * - NextRequset 기반 쿠키 read
+ * - session / cookieToken 전략에 따라 Authorization 헤더 세팅
+ * - session 전략일 때만 401 -> reissue -> 재시도 수행
  */
 export async function fetchServer<T>(
   request: NextRequest,
   endpoint: string,
-  options: RequestOptions = {},
+  options: BffRequestOptions = {},
 ): Promise<T> {
-  const url: string = buildUrl(endpoint);
-  const requireAuth: boolean = options.requireAuth !== false;
-  const sessionCookieName: string = options.sessionCookieName ?? SESSION_COOKIE_NAME;
+  const url: string = buildApiUrl(endpoint);
+  const authType = options.authType ?? "session";
+  const requireAuth = options.requireAuth !== false && authType === "session";
 
   const headers: Headers = new Headers(options.headers ?? {});
 
@@ -51,35 +39,22 @@ export async function fetchServer<T>(
     headers.set("Content-Type", "application/json");
   }
 
-  let sessionId: string | undefined;
+  let authContext: AuthContextResult = {};
 
   if (requireAuth) {
-    sessionId = request.cookies.get(sessionCookieName)?.value;
-
-    if (!sessionId || sessionId.length === 0) {
-      throw new CustomError(ErrorCode.UNAUTHORIZED, 401);
-    }
-
-    const session = await getSession(sessionId);
-    if (!session || session.accessToken.length === 0) {
-      await deleteSession(sessionId);
-      throw new CustomError(ErrorCode.UNAUTHORIZED, 401);
-    }
-
-    headers.set("authorization", `Bearer ${session.accessToken}`);
+    const cookieReader = createCookieReaderFromRequest(request);
+    authContext = await resolveAuthFromCookies(cookieReader, options);
+    applyAuthHeaders(headers, authContext);
   }
-
-  const baseInit: RequestInit = {
-    ...options,
-    headers,
-  };
 
   let response: Response;
 
   try {
-    response = await fetch(url, baseInit);
+    response = await fetch(url, {
+      ...options,
+      headers,
+    });
   } catch (error) {
-    // 네트워크 오류
     if (error instanceof Error && error.name === "AbortError") {
       throw new CustomError(ErrorCode.TIMEOUT_ERROR, 408);
     }
@@ -90,50 +65,12 @@ export async function fetchServer<T>(
     return await parseJsonResponse<T>(response);
   }
 
-  // 인증이 필요하고 401 발생 + 세션 아이디가 있는 경우 -> reissue 시도
-  if (requireAuth && response.status === 401 && sessionId) {
-    const session = await getSession(sessionId);
+  // 401 + reissue 허용 시 재발급 시도
+  const enableReissue: boolean = options.enableReissue !== false;
 
-    if (!session || !session.refreshToken || session.refreshToken.length === 0) {
-      await deleteSession(sessionId);
-      throw new CustomError(ErrorCode.UNAUTHORIZED, 401);
-    }
-
-    // reissue 엔드포인트 호출
-    const reissueUrl: string = buildUrl("api/auth/reissue");
-    const reissueRequestBody: ReissueRequest = { refreshToken: session.refreshToken }
-
-    let reissueResponse: Response;
-    try {
-      reissueResponse = await fetch(reissueUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(reissueRequestBody),
-      });
-    } catch {
-      await deleteSession(sessionId);
-      throw new CustomError(ErrorCode.NETWORK_ERROR, 0);
-    }
-
-    if (!reissueResponse.ok) {
-      await deleteSession(sessionId);
-      await handleErrorResponse(reissueResponse);
-    }
-
-    let reissueBody: ReissueResponse;
-    try {
-      reissueBody = (await reissueResponse.json()) as ReissueResponse;
-    } catch {
-      await deleteSession(sessionId);
-      throw new CustomError(ErrorCode.INTERNAL_SERVER_ERROR, 500);
-    }
-
-    await updateSession(sessionId, reissueBody.accessToken, reissueBody.refreshToken);
-
-    // 새로운 accessToken 으로 재시도
-    headers.set("authorization", `Bearer ${reissueBody.accessToken}`);
+  if (requireAuth && response.status === 401 && enableReissue && authContext.sessionId && authContext.refreshToken) {
+    authContext = await reissueAndUpdateSession(authContext.sessionId, authContext.refreshToken);
+    applyAuthHeaders(headers, authContext);
 
     const retryInit: RequestInit = {
       ...options,
@@ -147,13 +84,12 @@ export async function fetchServer<T>(
     }
 
     if (!response.ok) {
-      if (response.status === 401) {
-        await deleteSession(sessionId);
+      if (response.status === 401 && authContext.sessionId) {
+        await deleteSession(authContext.sessionId);
         throw new CustomError(ErrorCode.UNAUTHORIZED, 401);
       }
       await handleErrorResponse(response);
     }
-
     return await parseJsonResponse<T>(response);
   }
 
@@ -164,7 +100,7 @@ export async function fetchServer<T>(
 export async function getFetchServer<T>(
   request: NextRequest,
   endpoint: string,
-  options?: RequestOptions,
+  options?: BffRequestOptions,
 ): Promise<T> {
   return fetchServer<T>(request, endpoint, {
     ...(options ?? {}),
@@ -176,7 +112,7 @@ export async function postFetchServer<T>(
   request: NextRequest,
   endpoint: string,
   data?: unknown,
-  options?: RequestOptions,
+  options?: BffRequestOptions,
 ): Promise<T> {
   return fetchServer<T>(request, endpoint, {
     ...(options ?? {}),
@@ -189,7 +125,7 @@ export async function putServer<T>(
   request: NextRequest,
   endpoint: string,
   data?: unknown,
-  options?: RequestOptions,
+  options?: BffRequestOptions,
 ): Promise<T> {
   return fetchServer<T>(request, endpoint, {
     ...(options ?? {}),
@@ -202,7 +138,7 @@ export async function patchServer<T>(
   request: NextRequest,
   endpoint: string,
   data?: unknown,
-  options?: RequestOptions,
+  options?: BffRequestOptions,
 ): Promise<T> {
   return fetchServer<T>(request, endpoint, {
     ...(options ?? {}),
@@ -214,7 +150,7 @@ export async function patchServer<T>(
 export async function deleteServer<T>(
   request: NextRequest,
   endpoint: string,
-  options?: RequestOptions,
+  options?: BffRequestOptions,
 ): Promise<T> {
   return fetchServer<T>(request, endpoint, {
     ...(options ?? {}),

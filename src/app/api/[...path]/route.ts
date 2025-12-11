@@ -8,7 +8,8 @@ const gateway = createGateway({
   backendBaseUrl: API_BASE_URL,
   // promoteCookieToAuth: { cookieName: 'accessToken', overwriteIfExists: false },
   excludedRequestHeaders: ['content-length'],
-  useSessionAuth: true,
+  authType: "session",
+  requireAuth: true,
   sessionCookieName: SESSION_COOKIE_NAME,
 });
 

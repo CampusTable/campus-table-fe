@@ -1,23 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createSession, SESSION_COOKIE_NAME, SessionData } from "@/shared/lib/session/sessionStore";
-import { LoginRequest, LoginResponse, LoginApiResponse } from "@/features/auth/types/loginTypes";
+import { LoginApiResponse, LoginRequest, LoginResponse } from "@/features/auth/types/loginTypes";
 import { isProduction, SESSION_TTL_SECONDS } from "@/shared/utils/env/envConfig";
 import { createErrorNextResponse } from "@/shared/lib/errors/errorResponse";
-import { fetchServer } from "@/shared/lib/bff/fetchServer";
+import { postFetchServer } from "@/shared/lib/bff/fetchServer";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const loginRequest: LoginRequest = await request.json();
 
-    const upstreamBody: LoginApiResponse = await fetchServer<LoginApiResponse>(
-      request,
-      "/api/auth/login",
-      {
-        method: "POST",
-        body: JSON.stringify(loginRequest),
-        requireAuth: false,
-      },
-    );
+    const upstreamBody: LoginApiResponse = await postFetchServer<LoginApiResponse>(request, "/api/auth/login", loginRequest, {
+      requireAuth: false,
+      authType: "none",
+    });
 
     const sessionData: SessionData = {
       studentNumber: upstreamBody.studentNumber,
