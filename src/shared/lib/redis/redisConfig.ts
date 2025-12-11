@@ -1,14 +1,14 @@
 import Redis from "ioredis";
-import { REDIS_HOST, REDIS_PASSWORD, REDIS_PORT } from "@/shared/utils/env/envConfig";
+import { serverEnv } from "@/shared/config/env.server";
 
 let redisClient: Redis | null = null;
 
 export function getRedisClient(): Redis {
   if (redisClient === null) {
     redisClient = new Redis({
-      host: REDIS_HOST,
-      port: REDIS_PORT,
-      password: REDIS_PASSWORD,
+      host: serverEnv.REDIS_HOST,
+      port: Number(serverEnv.REDIS_PORT),
+      password: serverEnv.REDIS_PASSWORD,
     });
 
     redisClient.on("error", (error: Error) => {

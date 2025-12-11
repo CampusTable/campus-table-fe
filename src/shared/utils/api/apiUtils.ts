@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "@/shared/utils/env/envConfig";
+import { clientEnv } from "@/shared/config/env.client";
 
 /**
  * 공통 JSON 파서
@@ -20,7 +20,7 @@ export function buildApiUrl(endpoint: string, baseUrl?: string): string {
     return endpoint;
   }
 
-  const targetBase: string = (baseUrl ?? API_BASE_URL).replace(/\/+$/, "");
+  const targetBase: string = (baseUrl ?? clientEnv.API_BASE_URL).replace(/\/+$/, "");
   const trimmedEndpoint: string = endpoint.replace(/^\/+/, "");
 
   return `${targetBase}/${trimmedEndpoint}`;

@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createSession, SESSION_COOKIE_NAME, SessionData } from "@/shared/lib/session/sessionStore";
 import { LoginApiResponse, LoginRequest, LoginResponse } from "@/features/auth/types/loginTypes";
-import { isProduction, SESSION_TTL_SECONDS } from "@/shared/utils/env/envConfig";
 import { createErrorNextResponse } from "@/shared/lib/errors/errorResponse";
 import { postFetchServer } from "@/shared/lib/bff/fetchServer";
+import { isProduction } from "@/shared/config/env.client";
+import { serverEnv } from "@/shared/config/env.server";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
@@ -41,7 +42,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       sameSite: "strict",
       path: "/",
       domain: isProduction() ? "campustable.shop" : undefined,
-      maxAge: sessionData.maxAgeSeconds ?? SESSION_TTL_SECONDS,
+      maxAge: sessionData.maxAgeSeconds ?? serverEnv.SESSION_TTL_SECONDS,
     });
 
     return response;

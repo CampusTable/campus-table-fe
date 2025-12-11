@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { deleteSession, SESSION_COOKIE_NAME } from "@/shared/lib/session/sessionStore";
-import { isProduction } from "@/shared/utils/env/envConfig";
 import { createErrorNextResponse } from "@/shared/lib/errors/errorResponse";
 import { nvl } from "@/shared/utils/string/nvl";
+import { isProduction } from "@/shared/config/env.client";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {

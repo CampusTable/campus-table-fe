@@ -1,3 +1,5 @@
+"use client";
+
 import { handleErrorResponse } from "@/shared/lib/errors/errorResponse";
 import { CustomError } from "@/shared/lib/errors/customError";
 import { ErrorCode } from "@/shared/lib/errors/errorCodes";
@@ -9,7 +11,7 @@ export class ApiClient {
     options: RequestInit = {},
   ): Promise<T> {
     try {
-      const response: Response = await fetch(`${endpoint}`, {
+      const response: Response = await fetch(endpoint, {
         ...options,
         headers: {
           "Content-Type": "application/json",
@@ -25,13 +27,18 @@ export class ApiClient {
     } catch (error) {
       if (error instanceof CustomError) {
         throw error;
-      } else if (error instanceof Error) {
+      }
+
+      if (error instanceof Error) {
         if (error.name === "AbortError") {
           throw new CustomError(ErrorCode.TIMEOUT_ERROR, 408);
-        } else if (error.message.includes("fetch")) {
+        }
+
+        if (error.message.includes("fetch")) {
           throw new CustomError(ErrorCode.NETWORK_ERROR, 0);
         }
       }
+
       throw new CustomError(ErrorCode.INTERNAL_SERVER_ERROR, 500);
     }
   }

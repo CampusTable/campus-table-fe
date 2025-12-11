@@ -77,6 +77,7 @@ export class ApiServer {
     const enableReissue: boolean = options.enableReissue !== false;
 
     if (requireAuth && response.status === 401 && enableReissue && authContext.sessionId && authContext.refreshToken) {
+      console.log("[ApiServer] accessToken 재발급을 진행합니다");
       const updatedContext: AuthContextResult = await reissueAndUpdateSession(authContext.sessionId, authContext.refreshToken);
       applyAuthHeaders(headers, updatedContext);
 
