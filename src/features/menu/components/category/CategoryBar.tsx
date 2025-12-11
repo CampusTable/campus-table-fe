@@ -3,24 +3,20 @@
 import { useState } from "react";
 import styles from "./CategoryBar.module.css";
 import CategoryButton from "@/features/menu/components/category/button/CategoryButton";
-
-interface CategoryItem {
-  id: string;
-  label: string;
-}
+import { CategoryItem } from "@/features/menu/types/categoryType";
 
 interface CategoryBarProps {
   categories: CategoryItem[];
-  onChange?: (categoryId: string) => void;
+  onChange?: (categoryId: number) => void;
 }
 
 export default function CategoryBar({
   categories,
   onChange,
 }: CategoryBarProps) {
-  const [activeId, setActiveId] = useState<string>(categories[0].id);
+  const [activeId, setActiveId] = useState<number>(categories[0].id);
 
-  const handleSelect = (categoryId: string): void => {
+  const handleSelect = (categoryId: number): void => {
     if (categoryId === activeId) {
       return;
     }
