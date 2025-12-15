@@ -2,10 +2,10 @@ import { NextRequest } from "next/server";
 import { SESSION_COOKIE_NAME } from "@/shared/lib/session/sessionStore";
 import { createGateway } from "@/shared/lib/bff/gateway";
 import { GatewayContext } from "@/shared/lib/bff/gatewayTypes";
-import { clientEnv } from "@/shared/config/env.client";
+import { serverEnv } from "@/shared/config/env.server";
 
 const gateway = createGateway({
-  backendBaseUrl: clientEnv.API_BASE_URL,
+  backendBaseUrl: serverEnv.API_BASE_URL,
   // promoteCookieToAuth: { cookieName: 'accessToken', overwriteIfExists: false },
   excludedRequestHeaders: ['content-length'],
   authType: "session",
