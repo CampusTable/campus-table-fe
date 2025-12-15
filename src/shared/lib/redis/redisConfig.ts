@@ -7,7 +7,7 @@ export function getRedisClient(): Redis {
   if (redisClient === null) {
     redisClient = new Redis({
       host: serverEnv.REDIS_HOST,
-      port: Number(serverEnv.REDIS_PORT),
+      port: serverEnv.REDIS_PORT,
       password: serverEnv.REDIS_PASSWORD,
     });
 

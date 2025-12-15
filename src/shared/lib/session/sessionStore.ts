@@ -12,7 +12,7 @@ export interface SessionData {
   newUser: boolean;
 }
 
-const TTL: string = serverEnv.SESSION_TTL_SECONDS;
+const TTL: number = serverEnv.SESSION_TTL_SECONDS;
 
 const SESSION_PREFIX: string = "session:";
 

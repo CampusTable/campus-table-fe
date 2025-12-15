@@ -12,7 +12,7 @@ export const serverEnv = {
   ORIGIN_URL: requireEnv("NEXT_PUBLIC_ORIGIN_URL"),
   API_BASE_URL: requireEnv("NEXT_PUBLIC_API_BASE_URL"),
   REDIS_HOST: requireEnv("REDIS_HOST"),
-  REDIS_PORT: requireEnv("REDIS_PORT"),
+  REDIS_PORT: parseInt(requireEnv("REDIS_PORT")),
   REDIS_PASSWORD: requireEnv("REDIS_PASSWORD"),
-  SESSION_TTL_SECONDS: requireEnv("SESSION_TTL_SECONDS"),
+  SESSION_TTL_SECONDS: parseInt(requireEnv("SESSION_TTL_SECONDS")),
 }
