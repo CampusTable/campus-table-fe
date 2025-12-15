@@ -19,7 +19,7 @@ export interface BffRequestOptions extends RequestInit, CommonAuthOptions {
 
 /**
  * BFF(app/api/*) 라우트 -> 백엔드 API 호출 공통 헬퍼
- * - NextRequset 기반 쿠키 read
+ * - NextRequest 기반 쿠키 read
  * - session / cookieToken 전략에 따라 Authorization 헤더 세팅
  * - session 전략일 때만 401 -> reissue -> 재시도 수행
  */
