@@ -1,11 +1,11 @@
 import styles from "./MenuList.module.css";
-import MenuCard from "@/features/menu/card/MenuCard";
-import SeparationBar from "@/features/menu/bar/SeparationBar";
+import MenuCard from "@/features/menu/components/card/MenuCard";
+import SeparationBar from "@/features/menu/components/bar/SeparationBar";
 import React from "react";
-import { MenuListItem } from "@/features/menu/list/types/menuListType";
+import { MenuItem } from "@/features/menu/types/menuType";
 
 interface MenuListProps {
-  items: MenuListItem[];
+  items: MenuItem[];
 }
 
 export default function MenuList({
@@ -13,7 +13,7 @@ export default function MenuList({
 }: MenuListProps) {
   return (
     <div className={styles.container}>
-      {items.map((item: MenuListItem, index: number) => (
+      {items.map((item: MenuItem, index: number) => (
         <React.Fragment key={item.id}>
           <div className={styles.menuCardWrapper}>
             <MenuCard

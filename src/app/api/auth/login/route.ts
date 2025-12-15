@@ -1,26 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createSession, SESSION_COOKIE_NAME, SessionData } from "@/shared/lib/session/sessionStore";
-import { LoginRequest, LoginResponse, LoginUpstreamResponse } from "@/features/auth/types/loginTypes";
-import { API_BASE_URL, isProduction, SESSION_TTL_SECONDS } from "@/shared/utils/env/envConfig";
-import { createErrorNextResponse, handleErrorResponse } from "@/shared/lib/errors/errorResponse";
+import { LoginApiResponse, LoginRequest, LoginResponse } from "@/features/auth/types/loginTypes";
+import { createErrorNextResponse } from "@/shared/lib/errors/errorResponse";
+import { postFetchServer } from "@/shared/lib/bff/fetchServer";
+import { isProduction } from "@/shared/config/env.client";
+import { serverEnv } from "@/shared/config/env.server";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const loginRequest: LoginRequest = await request.json();
 
-    const upstream: Response = await fetch(`${API_BASE_URL}/api/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(loginRequest),
+    const upstreamBody: LoginApiResponse = await postFetchServer<LoginApiResponse>(request, "/api/auth/login", loginRequest, {
+      requireAuth: false,
+      authType: "none",
     });
-
-    if (!upstream.ok) {
-      await handleErrorResponse(upstream);
-    }
-
-    const upstreamBody: LoginUpstreamResponse = (await upstream.json()) as LoginUpstreamResponse;
 
     const sessionData: SessionData = {
       studentNumber: upstreamBody.studentNumber,
@@ -41,15 +34,15 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       newUser: upstreamBody.newUser,
     };
 
-    const response: NextResponse = NextResponse.json(responseBody, { status: upstream.status });
+    const response: NextResponse = NextResponse.json(responseBody, { status: 200 });
 
     response.cookies.set(SESSION_COOKIE_NAME, sessionId, {
       httpOnly: isProduction(),
       secure: isProduction(),
       sameSite: "strict",
       path: "/",
-      domain: isProduction() ? "campustable.shop" : "",
-      maxAge: sessionData.maxAgeSeconds ?? SESSION_TTL_SECONDS,
+      domain: isProduction() ? "campustable.shop" : undefined,
+      maxAge: sessionData.maxAgeSeconds ?? serverEnv.SESSION_TTL_SECONDS,
     });
 
     return response;

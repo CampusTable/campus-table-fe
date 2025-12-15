@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+
+  padding-bottom: 2rem;
+}
+
+.categoryBarWrapper {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.menuListWrapper {
+  padding-inline: 0.75rem;
+}

@@ -2,6 +2,8 @@
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+
+  background-color: var(--color-white);
 }
 
 .scrollContainer {

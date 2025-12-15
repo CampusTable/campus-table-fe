@@ -3,7 +3,7 @@ export interface LoginRequest {
   sejongPortalPw: string,
 }
 
-export interface LoginUpstreamResponse {
+export interface LoginApiResponse {
   studentNumber: string;
   studentName: string;
   accessToken: string;

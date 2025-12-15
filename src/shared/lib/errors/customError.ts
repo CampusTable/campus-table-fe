@@ -8,7 +8,6 @@ export class CustomError extends Error {
   constructor(
     errorCode: ErrorCode,
     httpStatus: number,
-    errorMessage?: string
   ) {
     const message: string = ERROR_MESSAGE[errorCode] || "알 수 없는 오류가 발생했습니다.";
     super(message);

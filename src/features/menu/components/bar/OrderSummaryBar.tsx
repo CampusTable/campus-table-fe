@@ -2,7 +2,7 @@
 
 import styles from "./OrderSummaryBar.module.css";
 import { formatNumberWithComma } from "@/shared/utils/number/utils";
-import CartButton, { ItemCount } from "@/features/menu/button/CartButton";
+import CartButton, { ItemCount } from "@/features/menu/components/button/CartButton";
 import { useRouter } from "next/navigation";
 import { MouseEventHandler } from "react";
 

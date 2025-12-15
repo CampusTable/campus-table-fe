@@ -1,6 +1,6 @@
 "use client";
 
-import CartToast from "@/features/menu/toast/CartToast";
+import CartToast from "@/features/menu/components/toast/CartToast";
 import { useState } from "react";
 
 export default function CartPage() {
