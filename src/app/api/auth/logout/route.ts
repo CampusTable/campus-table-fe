@@ -8,7 +8,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const sessionId: string = nvl(request.cookies.get(SESSION_COOKIE_NAME)?.value);
 
-    if (!sessionId) {
+    if (sessionId) {
       await deleteSession(sessionId);
     }
     const response: NextResponse = NextResponse.json(null);
