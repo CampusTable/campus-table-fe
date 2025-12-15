@@ -1,5 +1,4 @@
-"use server";
-
+import "server-only";
 import { NextRequest } from "next/server";
 import { CustomError } from "@/shared/lib/errors/customError";
 import { ErrorCode } from "@/shared/lib/errors/errorCodes";
