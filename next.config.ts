@@ -41,7 +41,7 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "campustable-s3.s3.ap-northeast-2.amazonaws.com",
         port: "",
-        pathname: "/**", // menu 경로만 허용. 더 넓게 허용하려면 "/**"
+        pathname: "/**",
       },
     ],
   },
