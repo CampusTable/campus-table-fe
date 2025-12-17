@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { isProduction } from "@/shared/config/env.client";
 
 const nextConfig: NextConfig = {
   turbopack: {
@@ -31,7 +32,20 @@ const nextConfig: NextConfig = {
     return config;
   },
 
-  /* config options here */
+  // next/image 원격 호스트 허용 설정
+  images: {
+    // NAT64/DNS64 등으로 “사설 IP로 판정”되는 경우를 개발환경에서만 허용
+    dangerouslyAllowLocalIP: !isProduction(),
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "campustable-s3.s3.ap-northeast-2.amazonaws.com",
+        port: "",
+        pathname: "/**", // menu 경로만 허용. 더 넓게 허용하려면 "/**"
+      },
+    ],
+  },
+
   reactCompiler: true,
 };
 
