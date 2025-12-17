@@ -149,9 +149,6 @@ jobs:
             echo "새로운 컨테이너 $CONTAINER_NAME 실행 중..."
             echo $PW | sudo -S docker run -d -p ${PORT}:3000 --name $CONTAINER_NAME \
               --env-file .env.production \
-              --dns 1.1.1.1 \
-              --dns 8.8.8.8 \
-              -e NODE_OPTIONS="--dns-result-order=ipv4first" \
               ${IMAGE}
             
             # <none> 태그로 남은 이미지 정리
