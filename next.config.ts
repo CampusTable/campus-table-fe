@@ -1,5 +1,4 @@
 import type { NextConfig } from "next";
-import { isProduction } from "@/shared/config/env.client";
 
 const nextConfig: NextConfig = {
   turbopack: {
@@ -34,8 +33,6 @@ const nextConfig: NextConfig = {
 
   // next/image 원격 호스트 허용 설정
   images: {
-    // NAT64/DNS64 등으로 “사설 IP로 판정”되는 경우를 개발환경에서만 허용
-    dangerouslyAllowLocalIP: !isProduction(),
     remotePatterns: [
       {
         protocol: "https",
