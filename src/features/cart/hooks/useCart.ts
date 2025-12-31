@@ -9,7 +9,7 @@ interface UseCartReturn {
   cartInfo: CartInfo | undefined,
   isLoading: boolean;
   error: Error | null;
-  getMenuQuantity: (menuId: number) => void;
+  getMenuQuantity: (menuId: number) => number;
   addToCart: (menuId: number) => void;
   updateMenuQuantity: (menuId: number, quantity: number) => void;
   removeFromCart: (menuId: number) => void;
