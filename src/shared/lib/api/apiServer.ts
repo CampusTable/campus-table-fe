@@ -49,9 +49,7 @@ export class ApiServer {
         authContext = await resolveAuthFromCookies(cookieReader, options);
         applyAuthHeaders(headers, authContext);
       } catch {
-        const cookieStore = await cookies();
-        cookieStore.delete(SESSION_COOKIE_NAME);
-        redirect("/login");
+        redirect("/api/auth/session-expired");
       }
     }
 
