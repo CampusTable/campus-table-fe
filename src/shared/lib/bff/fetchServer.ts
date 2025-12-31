@@ -120,7 +120,7 @@ export async function postFetchServer<T>(
   });
 }
 
-export async function putServer<T>(
+export async function putFetchServer<T>(
   request: NextRequest,
   endpoint: string,
   data?: unknown,
@@ -133,7 +133,7 @@ export async function putServer<T>(
   });
 }
 
-export async function patchServer<T>(
+export async function patchFetchServer<T>(
   request: NextRequest,
   endpoint: string,
   data?: unknown,
@@ -146,7 +146,7 @@ export async function patchServer<T>(
   });
 }
 
-export async function deleteServer<T>(
+export async function deleteFetchServer<T>(
   request: NextRequest,
   endpoint: string,
   options?: BffRequestOptions,
