@@ -10,6 +10,7 @@ import { useCart } from "@/features/cart/hooks/useCart";
 import OrderSummaryBar from "@/features/menu/components/bar/OrderSummaryBar";
 import { ItemCount } from "@/features/menu/components/button/CartButton";
 import CartToast from "@/features/menu/components/toast/CartToast";
+import { useToast } from "@/shared/hooks/useToast";
 
 interface MenuPageContainerProps {
   hakgwanMenuData: HakgwanMenuData;
@@ -26,8 +27,7 @@ export default function MenuPageContainer({
     return 0;
   });
 
-  const [toastVisible, setToastVisible] = useState<boolean>(false);
-  const [toastMessage, setToastMessage] = useState<string>("");
+  const { visible: toastVisible, message: toastMessage, showToast } = useToast(3000);
 
   const { cartInfo, addToCart } = useCart();
 
@@ -47,18 +47,10 @@ export default function MenuPageContainer({
   const handleAddToCart = (menuId: number): void => {
     addToCart(menuId, {
       onSuccess: () => {
-        setToastMessage("장바구니에 쏙 담았어요!");
-        setToastVisible(true);
-        setTimeout(() => {
-          setToastVisible(false);
-        }, 3000);
+        showToast("장바구니에 쏙 담았어요!");
       },
       onError: (message) => {
-        setToastMessage(message);
-        setToastVisible(true);
-        setTimeout(() => {
-          setToastVisible(false);
-        }, 3000);
+        showToast(message);
       }
     });
   };
