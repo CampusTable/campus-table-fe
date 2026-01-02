@@ -16,3 +16,24 @@
 .menuListWrapper {
   padding-inline: 0.75rem;
 }
+
+.menuListWrapperWithOrderSummaryBar {
+  padding-bottom: var(--order-summary-bar-height);
+}
+
+.toastWrapper {
+  position: fixed;
+  bottom: calc(var(--bottom-safe-navigation-height) + var(--order-summary-bar-height));
+  left: 0;
+  right: 0;
+  z-index: 1;
+
+  padding-inline: 1.25rem;
+  padding-bottom: 0.75rem;
+
+  pointer-events: none;
+}
+
+.toastWrapper > * {
+  pointer-events: auto;
+}
