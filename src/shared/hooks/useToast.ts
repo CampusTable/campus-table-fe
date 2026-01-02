@@ -19,17 +19,17 @@ export function useToast(
 ): UseToastReturn {
   const [visible, setVisible] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const hideTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<number | null>(null);
+  const hideTimerRef = useRef<number | null>(null);
   const visibleRef = useRef<boolean>(false);
 
   const showToast = useCallback((message: string) => {
     // 기존 타이머 정리
     if (timerRef.current) {
-      clearTimeout(timerRef.current);
+      window.clearTimeout(timerRef.current);
     }
     if (hideTimerRef.current) {
-      clearTimeout(hideTimerRef.current);
+      window.clearTimeout(hideTimerRef.current);
     }
 
     // 이미 토스트가 표시중이면 먼저 제거
@@ -39,13 +39,13 @@ export function useToast(
       visibleRef.current = false;
 
       // 애니메이션 완료 대기
-      hideTimerRef.current = setTimeout(() => {
+      hideTimerRef.current = window.setTimeout(() => {
         setMessage(message);
         setVisible(true);
         visibleRef.current = true;
 
         // duration 후 토스트 숨김
-        timerRef.current = setTimeout(() => {
+        timerRef.current = window.setTimeout(() => {
           setVisible(false);
           visibleRef.current = false;
           timerRef.current = null;
@@ -59,7 +59,7 @@ export function useToast(
       setVisible(true);
       visibleRef.current = true;
 
-      timerRef.current = setTimeout(() => {
+      timerRef.current = window.setTimeout(() => {
         setVisible(false);
         visibleRef.current = false;
         timerRef.current = null;
@@ -71,10 +71,10 @@ export function useToast(
   useEffect(() => {
     return () => {
       if (timerRef.current) {
-        clearTimeout(timerRef.current);
+        window.clearTimeout(timerRef.current);
       }
       if (hideTimerRef.current) {
-        clearTimeout(hideTimerRef.current);
+        window.clearTimeout(hideTimerRef.current);
       }
     };
   }, []);
