@@ -12,8 +12,8 @@ import {
   resolveAuthFromCookies
 } from "@/shared/lib/auth/authHandler";
 import { deleteSession, SESSION_COOKIE_NAME } from "@/shared/lib/session/sessionStore";
-import { redirect } from "next/dist/client/components/redirect";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export interface ServerRequestOptions extends RequestInit, CommonAuthOptions {
 }
