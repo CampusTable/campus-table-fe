@@ -6,7 +6,6 @@ import MenuList from "@/features/menu/components/list/MenuList";
 import { useMemo, useState } from "react";
 import { MenuItem } from "@/features/menu/types/menuType";
 import styles from "./MenuPageContainer.module.css";
-import { useRouter } from "next/navigation";
 import { useCart } from "@/features/cart/hooks/useCart";
 import OrderSummaryBar from "@/features/menu/components/bar/OrderSummaryBar";
 import { ItemCount } from "@/features/menu/components/button/CartButton";
@@ -19,7 +18,6 @@ interface MenuPageContainerProps {
 export default function MenuPageContainer({
   hakgwanMenuData
 }: MenuPageContainerProps) {
-  const router = useRouter();
 
   const [selectedCategoryId, setSelectedCategoryId] = useState<number>(() => {
     if (hakgwanMenuData.categoryItems.length > 0) {
@@ -31,7 +29,7 @@ export default function MenuPageContainer({
   const [toastVisible, setToastVisible] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string>("");
 
-  const { cartInfo, addToCart, isAddingToCart } = useCart();
+  const { cartInfo, addToCart } = useCart();
 
   const filteredMenuItems: MenuItem[] = useMemo(() =>
       hakgwanMenuData.menuItems.filter((item: MenuItem) =>

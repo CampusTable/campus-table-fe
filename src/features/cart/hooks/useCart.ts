@@ -14,8 +14,6 @@ interface UseCartReturn {
     onSuccess?: () => void;
     onError?: (message: string) => void;
   }) => void;
-  updateMenuQuantity: (menuId: number, quantity: number) => void;
-  removeFromCart: (menuId: number) => void;
   isAddingToCart: boolean;
 }
 
@@ -103,53 +101,12 @@ export function useCart(): UseCartReturn {
     pendingRequests.current.set(menuId, requestPromise);
   }, [getMenuQuantity, cartInfo, upsertCartMutation]);
 
-  /**
-   * 메뉴 수량 직접 설정
-   */
-  const updateMenuQuantity = useCallback((menuId: number, quantity: number) => {
-    if (quantity < 0 || quantity > 9) {
-      console.error("수량은 0 이상 9 이하로 설정해야합니다.");
-      return;
-    }
-
-    // 중복 요청 방지
-    if (pendingRequests.current.has(menuId)) {
-      return;
-    }
-
-    const requestPromise = new Promise<void>((resolve, reject) => {
-      upsertCartMutation.mutate(
-        { menuId, quantity },
-        {
-          onSuccess: () => {
-            pendingRequests.current.delete(menuId);
-            resolve();
-          },
-          onError: (error) => {
-            pendingRequests.current.delete(menuId);
-            reject(error);
-          },
-        }
-      );
-    });
-    pendingRequests.current.set(menuId, requestPromise);
-  }, [upsertCartMutation]);
-
-  /**
-   * 메뉴 삭제 (수량 0)
-   */
-  const removeFromCart = useCallback((menuId: number) => {
-    updateMenuQuantity(menuId, 0);
-  }, [updateMenuQuantity]);
-
   return {
     cartInfo,
     isLoading,
     error,
     getMenuQuantity,
     addToCart,
-    updateMenuQuantity,
-    removeFromCart,
     isAddingToCart: upsertCartMutation.isPending,
   };
 }
