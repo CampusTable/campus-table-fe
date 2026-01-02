@@ -10,7 +10,10 @@ interface UseCartReturn {
   isLoading: boolean;
   error: Error | null;
   getMenuQuantity: (menuId: number) => number;
-  addToCart: (menuId: number) => void;
+  addToCart: (menuId: number, callbacks?: {
+    onSuccess?: () => void;
+    onError?: (message: string) => void;
+  }) => void;
   updateMenuQuantity: (menuId: number, quantity: number) => void;
   removeFromCart: (menuId: number) => void;
   isAddingToCart: boolean;
@@ -46,7 +49,7 @@ export function useCart(): UseCartReturn {
    * 특정 메뉴의 현재 수량 조회
    */
   const getMenuQuantity = useCallback((menuId: number): number => {
-    const cartItem = cartInfo?.cartItems.find((item) => item.cartItemId === menuId);
+    const cartItem = cartInfo?.cartItems.find((item) => item.menuId === menuId);
     return cartItem?.quantity ?? 0;
   }, [cartInfo]);
 
@@ -54,26 +57,43 @@ export function useCart(): UseCartReturn {
    * 메뉴 1개 추가 (기존 수량 + 1)
    * - 버튼 연타 방지
    */
-  const addToCart = useCallback((menuId: number) => {
+  const addToCart = useCallback((
+    menuId: number,
+    callbacks?: {
+      onSuccess?: () => void;
+      onError?: (message: string) => void;
+    }
+  ) => {
     // 중복 요청 방지
     if (pendingRequests.current.has(menuId)) {
       return;
     }
 
-    // 현재 수량 조회
-    const currentQuantity: number = getMenuQuantity(menuId);
-    const newQuantity = currentQuantity + 1;
+    // 특정 메뉴 수량 조회
+    const menuQuantity: number = getMenuQuantity(menuId);
+    const newMenuQuantity: number = menuQuantity + 1;
+
+    // 장바구니 총 수량 조회
+    const totalQuantity: number = cartInfo?.totalQuantity ?? 0;
+    const newTotalQuantity: number = totalQuantity + 1;
+
+    if (newTotalQuantity > 9) {
+      callbacks?.onError?.("장바구니에는 최대 9개까지만 담을 수 있어요!");
+      return;
+    }
 
     const requestPromise = new Promise<void>((resolve, reject) => {
       upsertCartMutation.mutate(
-        { menuId, quantity: newQuantity },
+        { menuId, quantity: newMenuQuantity },
         {
           onSuccess: () => {
             pendingRequests.current.delete(menuId);
+            callbacks?.onSuccess?.();
             resolve();
           },
           onError: (error) => {
             pendingRequests.current.delete(menuId);
+            callbacks?.onError?.("장바구니 담기에 실패했어요.");
             reject(error);
           },
         }
@@ -81,7 +101,7 @@ export function useCart(): UseCartReturn {
     });
 
     pendingRequests.current.set(menuId, requestPromise);
-  }, [getMenuQuantity, upsertCartMutation]);
+  }, [getMenuQuantity, cartInfo, upsertCartMutation]);
 
   /**
    * 메뉴 수량 직접 설정
