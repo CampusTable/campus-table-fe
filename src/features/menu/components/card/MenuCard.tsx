@@ -10,15 +10,17 @@ import PopularTag from "@/features/menu/components/tags/PopularTag";
 type Rank = 1 | 2 | 3;
 
 interface MenuCardProps {
+  menuId: number;
   imageSrc: string;
   title: string;
   price: number;
   rank?: Rank;
   soldOut?: boolean;
-  onClickAdd?: () => void;
+  onClickAdd?: (menuId: number) => void;
 }
 
 export default function MenuCard({
+  menuId,
   imageSrc,
   title,
   price,
@@ -45,13 +47,13 @@ export default function MenuCard({
     ? `${styles.image} ${styles.soldOut}`
     : styles.image;
 
-  const handleOnClickAdd = ():void => {
+  const handleOnClickAdd = (): void => {
     if (soldOut) {
       return;
     }
-    // TODO: 임시 버튼 이벤트 (추후 교체)
-    // onClickAdd();
-    alert("버튼클릭~");
+    if (onClickAdd) {
+      onClickAdd(menuId);
+    }
   }
 
   return (

@@ -11,7 +11,9 @@ import {
   reissueAndUpdateSession,
   resolveAuthFromCookies
 } from "@/shared/lib/auth/authHandler";
-import { deleteSession } from "@/shared/lib/session/sessionStore";
+import { deleteSession, SESSION_COOKIE_NAME } from "@/shared/lib/session/sessionStore";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export interface ServerRequestOptions extends RequestInit, CommonAuthOptions {
 }
@@ -42,9 +44,13 @@ export class ApiServer {
 
     // 쿠키 기반 인증 처리 (session / cookieToken)
     if (requireAuth) {
-      const cookieReader = await createCookieReaderFromServer();
-      authContext = await resolveAuthFromCookies(cookieReader, options);
-      applyAuthHeaders(headers, authContext);
+      try {
+        const cookieReader = await createCookieReaderFromServer();
+        authContext = await resolveAuthFromCookies(cookieReader, options);
+        applyAuthHeaders(headers, authContext);
+      } catch {
+        redirect("/api/auth/session-expired");
+      }
     }
 
     let response: Response;
@@ -94,7 +100,10 @@ export class ApiServer {
       if (!response.ok) {
         if (response.status === 401 && updatedContext.sessionId) {
           await deleteSession(updatedContext.sessionId);
-          throw new CustomError(ErrorCode.UNAUTHORIZED, 401);
+
+          const cookieStore = await cookies();
+          cookieStore.delete(SESSION_COOKIE_NAME);
+          redirect("/login");
         }
         await handleErrorResponse(response);
       }

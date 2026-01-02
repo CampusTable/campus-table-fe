@@ -1,5 +1,5 @@
 # 빌드 단계
-FROM node:20.15.0 AS builder
+FROM node:20.15.0-slim AS builder
 WORKDIR /app
 
 # 패키지 설치
@@ -13,8 +13,10 @@ COPY . .
 RUN npm run build
 
 # 실행 단계
-FROM node:20.15.0-alpine
+FROM node:20.15.0-slim AS runner
 WORKDIR /app
+
+ENV NODE_ENV=production
 
 # 빌드 아티팩트 및 의존성만 복사
 COPY --from=builder /app/.next ./.next

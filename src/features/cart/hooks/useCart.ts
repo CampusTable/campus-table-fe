@@ -1,0 +1,112 @@
+"use client";
+
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { CartInfo, CartRequest } from "@/features/cart/types/cartType";
+import { getCartInfo, upsertCartInfo } from "@/features/cart/services/cartService";
+import { useCallback, useRef } from "react";
+
+interface UseCartReturn {
+  cartInfo: CartInfo | undefined,
+  isLoading: boolean;
+  error: Error | null;
+  getMenuQuantity: (menuId: number) => number;
+  addToCart: (menuId: number, callbacks?: {
+    onSuccess?: () => void;
+    onError?: (message: string) => void;
+  }) => void;
+  isAddingToCart: boolean;
+}
+
+export function useCart(): UseCartReturn {
+  const queryClient = useQueryClient();
+
+  // 진행 중인 요청 추적
+  const pendingRequests = useRef<Map<number, Promise<void>>>(new Map());
+
+  const {
+    data: cartInfo,
+    isLoading,
+    error,
+  } = useQuery<CartInfo>({
+    queryKey: ["cart"],
+    queryFn: getCartInfo,
+    retry: 1,
+  });
+
+  const upsertCartMutation = useMutation<CartInfo, Error, CartRequest>({
+    mutationFn: (request: CartRequest) => upsertCartInfo(request),
+    onSuccess: (data: CartInfo) => {
+      queryClient.setQueryData(["cart"], data);
+    },
+    onError: (error) => {
+      console.error("장바구니 작업 실패:", error);
+    },
+  });
+
+  /**
+   * 특정 메뉴의 현재 수량 조회
+   */
+  const getMenuQuantity = useCallback((menuId: number): number => {
+    const cartItem = cartInfo?.cartItems.find((item) => item.menuId === menuId);
+    return cartItem?.quantity ?? 0;
+  }, [cartInfo]);
+
+  /**
+   * 메뉴 1개 추가 (기존 수량 + 1)
+   * - 버튼 연타 방지
+   */
+  const addToCart = useCallback((
+    menuId: number,
+    callbacks?: {
+      onSuccess?: () => void;
+      onError?: (message: string) => void;
+    }
+  ) => {
+    // 중복 요청 방지
+    if (pendingRequests.current.has(menuId)) {
+      return;
+    }
+
+    // 특정 메뉴 수량 조회
+    const menuQuantity: number = getMenuQuantity(menuId);
+    const newMenuQuantity: number = menuQuantity + 1;
+
+    // 장바구니 총 수량 조회
+    const totalQuantity: number = cartInfo?.totalQuantity ?? 0;
+    const newTotalQuantity: number = totalQuantity + 1;
+
+    if (newTotalQuantity > 9) {
+      callbacks?.onError?.("장바구니에는 최대 9개까지만 담을 수 있어요!");
+      return;
+    }
+
+    const requestPromise = new Promise<void>((resolve, reject) => {
+      upsertCartMutation.mutate(
+        { menuId, quantity: newMenuQuantity },
+        {
+          onSuccess: () => {
+            pendingRequests.current.delete(menuId);
+            callbacks?.onSuccess?.();
+            resolve();
+          },
+          onError: (error) => {
+            pendingRequests.current.delete(menuId);
+            callbacks?.onError?.("장바구니 담기에 실패했어요.");
+            reject(error);
+          },
+        }
+      );
+    });
+
+    pendingRequests.current.set(menuId, requestPromise);
+  }, [getMenuQuantity, cartInfo, upsertCartMutation]);
+
+  return {
+    cartInfo,
+    isLoading,
+    error,
+    getMenuQuantity,
+    addToCart,
+    isAddingToCart: upsertCartMutation.isPending,
+  };
+}
