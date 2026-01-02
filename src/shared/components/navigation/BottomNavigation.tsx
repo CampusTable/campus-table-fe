@@ -94,6 +94,7 @@ export default function BottomNavigation() {
               key={item.key}
               href={item.href}
               className={styles.item}
+              replace
             >
               <Icon />
               <div className={labelClassName}>
