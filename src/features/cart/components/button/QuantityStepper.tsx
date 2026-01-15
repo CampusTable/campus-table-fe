@@ -39,7 +39,7 @@ export default function QuantityStepper({
 
   const decrementIcon = quantity === 1 ? <TrashIcon /> : <MinusIcon />;
   const incrementIcon = quantity !== 9 ? <PlusIcon /> : <PlusDisableIcon />;
-  const isPlusDisabled = quantity >= 9
+  const isPlusDisabled = quantity >= 9;
 
   return (
     <div className={styles.container}>
