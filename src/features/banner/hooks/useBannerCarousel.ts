@@ -16,7 +16,7 @@ interface UseBannerCarouselResult {
   handleTransitionEnd: () => void;
 }
 
-const SWIPE_THRESHOLD_RATIO: number = 0.5;
+const SWIPE_THRESHOLD_RATIO: number = 0.35;
 
 export function useBannerCarousel({
   totalCount,
