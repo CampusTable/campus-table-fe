@@ -1,4 +1,4 @@
-import { ShoppingBag } from "@/assets/icons";
+import { ShoppingBagIcon } from "@/assets/icons";
 import styles from "./Header.module.css";
 
 export default function Header() {
@@ -8,7 +8,7 @@ export default function Header() {
         <div className={styles.logo}>
           LOGO
         </div>
-        <ShoppingBag />
+        <ShoppingBagIcon />
       </div>
     </div>
   );

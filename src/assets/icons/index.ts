@@ -15,5 +15,5 @@ export { default as MyDisableIcon } from "./my-disable.svg";
 export { default as MyEnableIcon } from "./my-enable.svg";
 export { default as PlusIcon } from "./plus.svg";
 export { default as PlusDisableIcon } from "./plus-disable.svg";
-export { default as ShoppingBag } from "./shopping-bag.svg";
+export { default as ShoppingBagIcon } from "./shopping-bag.svg";
 export { default as TrashIcon } from "./trash.svg";
