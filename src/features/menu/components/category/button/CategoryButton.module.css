@@ -27,5 +27,5 @@
 
 .labelActive {
   color: var(--color-white);
-  font-weight: var(--font-extrabold);
+  font-weight: var(--font-bold);
 }
