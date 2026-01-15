@@ -3,6 +3,9 @@
   justify-content: center;
   align-content: center;
 
+  width: 5.125rem;
+  height: 1.75rem;
+
   padding-block: 0.44rem;
   padding-inline: 0.5rem;
 
@@ -15,6 +18,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
 }
 
 .label {
