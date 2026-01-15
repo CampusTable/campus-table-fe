@@ -13,6 +13,7 @@ export { default as JingwanEnableIcon } from "./jingwan-enable.svg";
 export { default as MinusIcon } from "./minus.svg";
 export { default as MyDisableIcon } from "./my-disable.svg";
 export { default as MyEnableIcon } from "./my-enable.svg";
+export { default as PleadingFaceIcon } from "./pleading-face.svg";
 export { default as PlusIcon } from "./plus.svg";
 export { default as PlusDisableIcon } from "./plus-disable.svg";
 export { default as ShoppingBagIcon } from "./shopping-bag.svg";

@@ -1,28 +1,19 @@
-"use client";
-
-import CartToast from "@/features/menu/components/toast/CartToast";
-import { useState } from "react";
+import EmptyCartView from "@/features/cart/components/view/EmptyCartView";
+import CartMenuCard from "@/features/cart/components/card/CartMenuCard";
 
 export default function CartPage() {
-  const [toastVisible, setToastVisible] = useState<boolean>(false);
-
-  const handleClick = (): void => {
-    setToastVisible(true);
-    setTimeout(() => setToastVisible(false), 1500);
-  }
   return (
-    <div className="w-full">
-      장바구니 페이지
-      <button
-        type="button"
-        onClick={handleClick}
-      >
-        토스트
-      </button>
-      <CartToast
-        visible={toastVisible}
-        message="장바구니에 쏙 담았어요!"
-      />
-    </div>
+    // <>
+    //   <CartMenuCard menuId={1}
+    //                 imageSrc="/tmp/menu/menu-1.png"
+    //                 title="김치제육 덮밥"
+    //                 price={6000} />
+    //   <CartMenuCard menuId={1}
+    //                 imageSrc="/tmp/menu/menu-1.png"
+    //                 title="김치제육 덮밥"
+    //                 rank={1}
+    //                 price={6000} />
+    // </>
+    <EmptyCartView/>
   );
 }

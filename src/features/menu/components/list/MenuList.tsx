@@ -1,6 +1,6 @@
 import styles from "./MenuList.module.css";
 import MenuCard from "@/features/menu/components/card/MenuCard";
-import SeparationBar from "@/features/menu/components/bar/SeparationBar";
+import SeparationBar from "@/shared/components/bar/SeparationBar";
 import React from "react";
 import { MenuItem } from "@/features/menu/types/menuType";
 
