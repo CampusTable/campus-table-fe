@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+
+  padding-block: 0.44rem;
+  padding-inline: 0.5rem;
+
+  border-radius: 0.25rem;
+  border: 1px solid var(--color-gray-200);
+  background-color: var(--color-white);
+}
+
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.label {
+  color: var(--color-black);
+  font-size: var(--text-xs);
+  font-style: normal;
+  font-weight: var(--font-medium);
+  line-height: var(--line-height-single);
+  letter-spacing: var(--letter-spacing);
+}

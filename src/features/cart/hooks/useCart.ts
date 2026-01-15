@@ -14,6 +14,10 @@ interface UseCartReturn {
     onSuccess?: () => void;
     onError?: (message: string) => void;
   }) => void;
+  removeFromCart: (menuId: number, callbacks?: {
+    onSuccess?: () => void;
+    onError?: (message: string) => void;
+  }) => void;
   isAddingToCart: boolean;
 }
 
@@ -54,6 +58,7 @@ export function useCart(): UseCartReturn {
   /**
    * 메뉴 1개 추가 (기존 수량 + 1)
    * - 버튼 연타 방지
+   * - 각 메뉴는 최대 9개까지
    */
   const addToCart = useCallback((
     menuId: number,
@@ -97,12 +102,61 @@ export function useCart(): UseCartReturn {
     pendingRequests.current.set(menuId, requestPromise);
   }, [getMenuQuantity, upsertCartMutation]);
 
+  /**
+   * 메뉴 1개 감소 (기존 수량 - 1)
+   * - 수량이 1이면 장바구니에서 삭제 (수량 0으로 설정)
+   * - 버튼 연타 방지
+   */
+  const removeFromCart = useCallback((
+    menuId: number,
+    callbacks?: {
+      onSuccess?: () => void;
+      onError?: (message: string) => void;
+    }
+  ) => {
+    // 중복 요청 방지
+    if (pendingRequests.current.has(menuId)) {
+      return;
+    }
+
+    // 특정 메뉴 수량 조회
+    const menuQuantity = getMenuQuantity(menuId);
+
+    // 수량이 0이면 실행 중지
+    if (menuQuantity === 0) {
+      return;
+    }
+
+    const newMenuQuantity = menuQuantity - 1;
+
+    const requestPromise = new Promise<void>((resolve, reject) => {
+      upsertCartMutation.mutate(
+        { menuId, quantity: newMenuQuantity },
+        {
+          onSuccess: () => {
+            pendingRequests.current.delete(menuId);
+            callbacks?.onSuccess?.();
+            resolve();
+          },
+          onError: (error) => {
+            pendingRequests.current.delete(menuId);
+            callbacks?.onError?.("장바구니 수정에 실패했어요. 잠시 후 다시 시도해주세요.");
+            reject(error);
+          },
+        }
+      );
+    });
+
+    pendingRequests.current.set(menuId, requestPromise);
+  }, [getMenuQuantity, upsertCartMutation]);
+
   return {
     cartInfo,
     isLoading,
     error,
     getMenuQuantity,
     addToCart,
+    removeFromCart,
     isAddingToCart: upsertCartMutation.isPending,
   };
 }

@@ -36,7 +36,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "campustable-s3.s3.ap-northeast-2.amazonaws.com",
+        hostname: "campus-table-s3.s3.ap-northeast-2.amazonaws.com",
         port: "",
         pathname: "/**",
       },
