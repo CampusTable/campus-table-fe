@@ -1,5 +1,6 @@
 import { ShoppingBagIcon } from "@/assets/icons";
 import styles from "./Header.module.css";
+import Link from "next/link";
 
 export default function Header() {
   return (
@@ -8,7 +9,9 @@ export default function Header() {
         <div className={styles.logo}>
           LOGO
         </div>
-        <ShoppingBagIcon />
+        <Link href="/cart">
+          <ShoppingBagIcon />
+        </Link>
       </div>
     </div>
   );
