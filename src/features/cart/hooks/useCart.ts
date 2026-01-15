@@ -71,13 +71,9 @@ export function useCart(): UseCartReturn {
     const menuQuantity: number = getMenuQuantity(menuId);
     const newMenuQuantity: number = menuQuantity + 1;
 
-    // 장바구니 총 수량 조회
-    const totalQuantity: number = cartInfo?.totalQuantity ?? 0;
-    const newTotalQuantity: number = totalQuantity + 1;
-
-    if (newTotalQuantity > 9) {
-      callbacks?.onError?.("장바구니에는 최대 9개까지만 담을 수 있어요!");
-      return;
+    if (newMenuQuantity > 9) {
+      callbacks?.onError?.("각 메뉴는 최대 9개까지만 담을 수 있어요!")
+      return
     }
 
     const requestPromise = new Promise<void>((resolve, reject) => {
@@ -99,7 +95,7 @@ export function useCart(): UseCartReturn {
     });
 
     pendingRequests.current.set(menuId, requestPromise);
-  }, [getMenuQuantity, cartInfo, upsertCartMutation]);
+  }, [getMenuQuantity, upsertCartMutation]);
 
   return {
     cartInfo,
