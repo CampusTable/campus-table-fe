@@ -2,18 +2,18 @@
 
 import styles from "./OrderSummaryBar.module.css";
 import { formatNumberWithComma } from "@/shared/utils/number/utils";
-import CartButton, { ItemCount } from "@/features/menu/components/button/CartButton";
+import CartButton from "@/features/menu/components/button/CartButton";
 import { useRouter } from "next/navigation";
 import { MouseEventHandler } from "react";
 
 interface OrderSummaryBarProps {
   totalPrice: number;
-  itemCount: ItemCount;
+  quantity: number;
 }
 
 export default function OrderSummaryBar({
   totalPrice,
-  itemCount,
+  quantity,
 }: OrderSummaryBarProps) {
 
   const router = useRouter();
@@ -35,7 +35,7 @@ export default function OrderSummaryBar({
         </div>
         <div className={styles.buttonWrapper}>
           <CartButton
-            itemCount={itemCount}
+            quantity={quantity}
             onClick={handleCartButtonClick}
           />
         </div>

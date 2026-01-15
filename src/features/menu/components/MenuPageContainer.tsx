@@ -8,7 +8,6 @@ import { MenuItem } from "@/features/menu/types/menuType";
 import styles from "./MenuPageContainer.module.css";
 import { useCart } from "@/features/cart/hooks/useCart";
 import OrderSummaryBar from "@/features/menu/components/bar/OrderSummaryBar";
-import { ItemCount } from "@/features/menu/components/button/CartButton";
 import CartToast from "@/features/menu/components/toast/CartToast";
 import { useToast } from "@/shared/hooks/useToast";
 
@@ -56,7 +55,6 @@ export default function MenuPageContainer({
   };
 
   const totalQuantity: number = cartInfo?.totalQuantity ?? 0;
-  const cartItemCount: ItemCount = Math.min(Math.max(totalQuantity, 1), 9) as ItemCount;
   const hasCartItems: boolean = totalQuantity > 0;
 
   const menuListWrapperClassName = hasCartItems
@@ -89,7 +87,7 @@ export default function MenuPageContainer({
       {hasCartItems && cartInfo && (
         <OrderSummaryBar
           totalPrice={cartInfo.totalPrice}
-          itemCount={cartItemCount}
+          quantity={totalQuantity}
         />
       )}
     </div>
