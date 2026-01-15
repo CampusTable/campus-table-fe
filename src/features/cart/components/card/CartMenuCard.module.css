@@ -1,0 +1,55 @@
+.container {
+  display: flex;
+  position: relative;
+  gap: 1rem;
+
+  border: 1px solid black;
+
+  width: 100%;
+
+  background-color: var(--color-white);
+}
+
+.imageWrapper {
+  position: relative;
+  width: 5.125rem;
+  height: 5.125rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.labelWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  padding-top: 0.25rem;
+}
+
+.title {
+  color: var(--color-black);
+  font-size: var(--text-base);
+  font-style: normal;
+  font-weight: var(--font-semibold);
+  line-height: var(--line-height-single);
+  letter-spacing: var(--letter-spacing);
+}
+
+.price {
+  color: var(--color-black);
+  font-size: var(--text-sm);
+  font-style: normal;
+  font-weight: var(--font-medium);
+  line-height: var(--line-height-single);
+  letter-spacing: var(--letter-spacing);
+}
+
+.stepperWrapper {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
