@@ -19,7 +19,7 @@ export default function OrderSummaryBar({
   const router = useRouter();
 
   const handleCartButtonClick: MouseEventHandler<HTMLButtonElement> = () => {
-    router.replace("/cart");
+    router.push("/cart");
   }
 
   return (
