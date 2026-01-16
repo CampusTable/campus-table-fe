@@ -1,7 +1,7 @@
 "use client" // TODO: 추후 로그아웃 정상 구현 후 SSR 변경
 
 import { useRouter } from "next/navigation";
-import { logout } from "@/features/auth/api/logoutApi";
+import { logout } from "@/features/auth/api/logoutApi.client";
 
 export default function MyMainPage() {
   const router = useRouter();

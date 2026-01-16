@@ -1,3 +1,4 @@
+"use client";
 import { CartApiResponse, CartRequest } from "@/features/cart/types/cartType";
 import { apiClient } from "@/shared/lib/api/apiClient";
 

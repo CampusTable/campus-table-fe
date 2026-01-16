@@ -2,8 +2,8 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CartInfo, CartRequest } from "@/features/cart/types/cartType";
-import { getCartInfo, upsertCartInfo } from "@/features/cart/services/cartService";
 import { useCallback, useMemo, useRef } from "react";
+import { getCartInfo, upsertCartInfo } from "@/features/cart/services/cartService.client";
 
 interface UseCartReturn {
   cartInfo: CartInfo | undefined,

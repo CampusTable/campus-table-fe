@@ -1,6 +1,6 @@
 "use client";
 
-import { HakgwanMenuData } from "@/features/menu/services/hakgwanMenuService";
+import { HakgwanMenuData } from "@/features/menu/services/hakgwanMenuService.server";
 import CategoryBar from "@/features/menu/components/category/CategoryBar";
 import MenuList from "@/features/menu/components/list/MenuList";
 import { useMemo, useState } from "react";

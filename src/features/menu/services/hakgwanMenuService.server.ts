@@ -1,6 +1,6 @@
-import { getAllCafeteria } from "@/features/menu/api/cafeteriaApi";
-import { getAllMenuByCafeteriaId } from "@/features/menu/api/menuApi";
-import { getCategoriesByCafeteriaId } from "@/features/menu/api/categoryApi";
+import { getAllCafeteria } from "@/features/menu/api/cafeteriaApi.server";
+import { getAllMenuByCafeteriaId } from "@/features/menu/api/menuApi.server";
+import { getCategoriesByCafeteriaId } from "@/features/menu/api/categoryApi.server";
 import { CategoryApiResponse, CategoryItem } from "@/features/menu/types/categoryType";
 import { MenuApiResponse, MenuItem } from "@/features/menu/types/menuType";
 import { CafeteriaApiResponse } from "@/features/menu/types/cafeteriaType";

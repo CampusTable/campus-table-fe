@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import { CustomError } from "@/shared/lib/errors/customError";
 import { ERROR_MESSAGE } from "@/shared/lib/errors/errorCodes";
 import { LoginRequest } from "@/features/auth/types/loginTypes";
-import { login } from "@/features/auth/api/loginApi";
+import { login } from "@/features/auth/api/loginApi.client";
 
 export default function LoginForm() {
   const router = useRouter();
