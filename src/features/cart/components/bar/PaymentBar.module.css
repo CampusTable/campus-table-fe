@@ -1,0 +1,43 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 1.25rem 1.5rem 0 0;
+  background-color: var(--color-white);
+
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.20);
+
+  width: 100%;
+  height: var(--payment-bar-height);
+
+  padding-inline: 1.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1.25rem;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  border-radius: 1rem;
+  background-color: var(--color-main);
+
+  padding-block: 1.25rem;
+}
+
+.label {
+  color: var(--color-white);
+  text-align: center;
+
+  font-size: var(--text-base);
+  font-weight: var(--font-bold);
+  line-height: var(--line-height-single);
+  letter-spacing: var(--letter-spacing);
+}
+
+@theme {
+  --payment-bar-height: 5.75rem;
+}
