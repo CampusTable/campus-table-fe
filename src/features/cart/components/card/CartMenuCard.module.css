@@ -3,8 +3,6 @@
   position: relative;
   gap: 1rem;
 
-  border: 1px solid black;
-
   width: 100%;
 
   background-color: var(--color-white);
