@@ -1,3 +1,4 @@
+import "server-only";
 import { apiServer } from "@/shared/lib/api/apiServer";
 import { CategoryApiResponse } from "@/features/menu/types/categoryType";
 

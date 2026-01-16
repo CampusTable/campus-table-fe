@@ -1,6 +1,5 @@
 "use client";
 
-import { HakgwanMenuData } from "@/features/menu/services/hakgwanMenuService";
 import CategoryBar from "@/features/menu/components/category/CategoryBar";
 import MenuList from "@/features/menu/components/list/MenuList";
 import { useMemo, useState } from "react";
@@ -10,6 +9,7 @@ import { useCart } from "@/features/cart/hooks/useCart";
 import OrderSummaryBar from "@/features/menu/components/bar/OrderSummaryBar";
 import CartToast from "@/features/menu/components/toast/CartToast";
 import { useToast } from "@/shared/hooks/useToast";
+import { HakgwanMenuData } from "@/features/menu/types/hakgwanType";
 
 interface MenuPageContainerProps {
   hakgwanMenuData: HakgwanMenuData;

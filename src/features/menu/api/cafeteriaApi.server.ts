@@ -1,3 +1,4 @@
+import "server-only";
 import { apiServer } from "@/shared/lib/api/apiServer";
 import { CafeteriaApiResponse } from "@/features/menu/types/cafeteriaType";
 

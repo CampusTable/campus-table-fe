@@ -1,3 +1,4 @@
+"use client";
 import { apiClient } from "@/shared/lib/api/apiClient";
 import { LoginRequest, LoginResponse } from "@/features/auth/types/loginTypes";
 

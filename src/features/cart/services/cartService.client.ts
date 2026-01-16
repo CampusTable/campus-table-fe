@@ -1,6 +1,7 @@
+"use client";
 import { CartApiResponse, CartInfo, CartRequest } from "@/features/cart/types/cartType";
-import { getCart, upsertCart } from "@/features/cart/api/cartApi";
 import { toCartInfo } from "@/features/cart/utils/cartMapper";
+import { getCart, upsertCart } from "@/features/cart/api/cartApi.client";
 
 export async function getCartInfo(): Promise<CartInfo> {
   const cartApiResponse: CartApiResponse = await getCart();

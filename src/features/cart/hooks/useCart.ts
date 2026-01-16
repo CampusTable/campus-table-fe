@@ -2,8 +2,8 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CartInfo, CartRequest } from "@/features/cart/types/cartType";
-import { getCartInfo, upsertCartInfo } from "@/features/cart/services/cartService";
-import { useCallback, useRef } from "react";
+import { useCallback, useMemo, useRef } from "react";
+import { getCartInfo, upsertCartInfo } from "@/features/cart/services/cartService.client";
 
 interface UseCartReturn {
   cartInfo: CartInfo | undefined,
@@ -37,6 +37,18 @@ export function useCart(): UseCartReturn {
     retry: 1,
   });
 
+  // menuId 기준으로 순서 정렬
+  const sortedCartInfo = useMemo(() => {
+    if (!cartInfo) {
+      return undefined;
+    }
+
+    return {
+      ...cartInfo,
+      cartItems: [...cartInfo.cartItems].sort((a, b) => a.menuId - b.menuId)
+    };
+  }, [cartInfo]);
+
   const upsertCartMutation = useMutation<CartInfo, Error, CartRequest>({
     mutationFn: (request: CartRequest) => upsertCartInfo(request),
     onSuccess: (data: CartInfo) => {
@@ -51,9 +63,9 @@ export function useCart(): UseCartReturn {
    * 특정 메뉴의 현재 수량 조회
    */
   const getMenuQuantity = useCallback((menuId: number): number => {
-    const cartItem = cartInfo?.cartItems.find((item) => item.menuId === menuId);
+    const cartItem = sortedCartInfo?.cartItems.find((item) => item.menuId === menuId);
     return cartItem?.quantity ?? 0;
-  }, [cartInfo]);
+  }, [sortedCartInfo]);
 
   /**
    * 메뉴 1개 추가 (기존 수량 + 1)
@@ -151,7 +163,7 @@ export function useCart(): UseCartReturn {
   }, [getMenuQuantity, upsertCartMutation]);
 
   return {
-    cartInfo,
+    cartInfo: sortedCartInfo,
     isLoading,
     error,
     getMenuQuantity,

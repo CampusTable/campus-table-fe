@@ -1,3 +1,4 @@
+"use client";
 import { apiClient } from "@/shared/lib/api/apiClient";
 
 export async function logout(): Promise<void> {

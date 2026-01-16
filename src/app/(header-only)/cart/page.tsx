@@ -1,19 +1,11 @@
 import EmptyCartView from "@/features/cart/components/view/EmptyCartView";
-import CartMenuCard from "@/features/cart/components/card/CartMenuCard";
+import CartView from "@/features/cart/components/view/CartView";
+import { getCartInfo } from "@/features/cart/services/cartService.server";
 
-export default function CartPage() {
-  return (
-    // <>
-    //   <CartMenuCard menuId={1}
-    //                 imageSrc="/tmp/menu/menu-1.png"
-    //                 title="김치제육 덮밥"
-    //                 price={6000} />
-    //   <CartMenuCard menuId={1}
-    //                 imageSrc="/tmp/menu/menu-1.png"
-    //                 title="김치제육 덮밥"
-    //                 rank={1}
-    //                 price={6000} />
-    // </>
-    <EmptyCartView/>
-  );
+export default async function CartPage() {
+
+  const cartInfo = await getCartInfo();
+  const empty = cartInfo.totalQuantity === 0;
+
+  return empty ? <EmptyCartView /> : <CartView />
 }
