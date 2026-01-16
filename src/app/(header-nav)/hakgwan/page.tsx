@@ -1,7 +1,8 @@
 import AdBannerCarousel from "@/features/banner/components/AdBannerCarousel";
 import styles from "./page.module.css";
-import { getHakgwanMenus, HakgwanMenuData } from "@/features/menu/services/hakgwanMenuService.server";
+import { getHakgwanMenus } from "@/features/menu/services/hakgwanMenuService.server";
 import MenuPageContainer from "@/features/menu/components/MenuPageContainer";
+import { HakgwanMenuData } from "@/features/menu/types/hakgwanType";
 
 export default async function HakgwanMainPage() {
 

@@ -6,11 +6,7 @@ import { MenuApiResponse, MenuItem } from "@/features/menu/types/menuType";
 import { CafeteriaApiResponse } from "@/features/menu/types/cafeteriaType";
 import { toCategoryItem } from "@/features/menu/utils/categoryMapper";
 import { toMenuItem } from "@/features/menu/utils/menuMapper";
-
-export interface HakgwanMenuData {
-  categoryItems: CategoryItem[];
-  menuItems: MenuItem[];
-}
+import { HakgwanMenuData } from "@/features/menu/types/hakgwanType";
 
 export async function getHakgwanMenus(): Promise<HakgwanMenuData> {
   const cafeterias: CafeteriaApiResponse[] = await getAllCafeteria();
